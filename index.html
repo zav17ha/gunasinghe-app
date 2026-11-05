@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gunasinghe Group</title>
+<meta name="theme-color" content="#F3F4F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D100F" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gunasinghe Group">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px;font-family:system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+/* Layout: phone-first ledger app — sticky header, one scrolling column (max 640px), fixed bottom tab bar, bottom sheets for entry */
+:root{
+  --bg:#F3F4F2; --surface:#FFFFFF; --fg:#151918; --muted:#6A716E; --line:#E2E5E2;
+  --accent:#0D7A5B; --accent-soft:#E1F0EA; --neg:#C33A2F; --neg-soft:#FBE9E7; --warn:#A86400; --warn-soft:#FBF0DC;
+  --c-driver:#5B6BD6; --c-fuel:#D98B1E; --c-repair:#C33A2F; --c-loan:#7A5BB8; --c-ins:#2C8FB0; --c-toll:#4E8A2E; --c-other:#8A918E;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",system-ui,"Segoe UI",Roboto,sans-serif;
+  --font-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",system-ui,sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D100F; --surface:#181C1A; --fg:#ECEFED; --muted:#98A09C; --line:#272D2A;
+  --accent:#3DBE92; --accent-soft:#153328; --neg:#FF6F62; --neg-soft:#3A1A17; --warn:#E3A33D; --warn-soft:#3A2B12;
+  --c-driver:#8C98F0; --c-fuel:#EDA543; --c-repair:#FF6F62; --c-loan:#AE8FE6; --c-ins:#5EC0E0; --c-toll:#93CC6A; --c-other:#9AA19E;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D100F; --surface:#181C1A; --fg:#ECEFED; --muted:#98A09C; --line:#272D2A;
+  --accent:#3DBE92; --accent-soft:#153328; --neg:#FF6F62; --neg-soft:#3A1A17; --warn:#E3A33D; --warn-soft:#3A2B12;
+  --c-driver:#8C98F0; --c-fuel:#EDA543; --c-repair:#FF6F62; --c-loan:#AE8FE6; --c-ins:#5EC0E0; --c-toll:#93CC6A; --c-other:#9AA19E;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px)}
+header.top .wrap{display:flex;align-items:center;gap:12px;padding-block:14px 10px}
+.brand{flex:1;min-width:0}
+.brand small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.brand h1{margin:0;font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.plate{font-size:12px;font-weight:700;letter-spacing:.06em;padding:4px 8px;border:1.5px solid var(--fg);border-radius:6px;white-space:nowrap}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--surface);color:var(--fg);border:1px solid var(--line)}
+.icon-btn svg{width:18px;height:18px}
+
+main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+main .wrap{display:flex;flex-direction:column;gap:16px;padding-block:6px 24px}
+
+.banner{padding:12px 14px;border-radius:var(--r);background:var(--warn-soft);color:var(--warn);font-size:14px}
+.seg{display:flex;background:color-mix(in srgb,var(--fg) 7%,transparent);border-radius:10px;padding:2px;gap:2px}
+.seg button{flex:1;padding:7px 6px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+.card{background:var(--surface);border-radius:var(--r);padding:16px}
+.hero .label{font-size:13px;color:var(--muted);font-weight:600}
+.hero .big{font-family:var(--font-display);font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-top:4px}
+.hero .big.neg{color:var(--neg)}
+.hero .sub{margin-top:8px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:4px 14px}
+.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.chips.wrapc{flex-wrap:wrap;overflow:visible}
+.photo{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.photo img{max-width:100%;max-height:420px;border-radius:12px;display:block;background:var(--surface)}
+.photo-add{width:100%;border-style:dashed}
+.row > button.main{padding:0;min-width:0}
+.login{display:flex;flex-direction:column;gap:14px;margin-top:24px}
+.login h2{margin:0;font-family:var(--font-display);font-size:24px;letter-spacing:-.02em}
+.login .field label{width:30%}
+.signed{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 14px;border-radius:12px;font-weight:600;font-size:15px;background:var(--surface);color:var(--fg);border:1px solid var(--line)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+:root[data-theme="dark"] .btn.primary{color:#04150F}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#04150F}}
+.btn.danger{color:var(--neg);background:var(--neg-soft);border-color:transparent}
+.btn.small{padding:7px 12px;font-size:14px;border-radius:10px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+.section-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:4px 2px -6px}
+.section-title h2{margin:0;font-family:var(--font-display);font-size:20px;font-weight:700;letter-spacing:-.02em}
+.section-title span{color:var(--muted);font-size:13px}
+
+.rows{background:var(--surface);border-radius:var(--r);overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;padding:12px 16px;width:100%;text-align:left;position:relative}
+.row + .row::before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:var(--line)}
+button.row:active{background:color-mix(in srgb,var(--fg) 5%,transparent)}
+.row .main{flex:1;min-width:0}
+.row .t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .s{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .amt{font-weight:600;text-align:right;white-space:nowrap}
+.row .amt small{display:block;font-weight:500;font-size:12px;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.datebox{width:40px;flex:none;text-align:center;line-height:1.1}
+.datebox b{display:block;font-size:18px;font-family:var(--font-display)}
+.datebox span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;letter-spacing:.02em}
+.pill.ok{background:var(--accent-soft);color:var(--accent)}
+.pill.due{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--neg-soft);color:var(--neg)}
+
+.brk .row{flex-wrap:wrap;row-gap:6px}
+.bar{flex-basis:100%;height:4px;border-radius:2px;background:color-mix(in srgb,var(--fg) 7%,transparent);overflow:hidden;margin-left:22px}
+.bar i{display:block;height:100%;border-radius:2px}
+.row.total .t,.row.total .amt{font-size:16px;font-weight:700}
+
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -2px;padding:0 2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:7px 13px;border-radius:999px;font-size:13px;font-weight:600;background:var(--surface);border:1px solid var(--line);white-space:nowrap;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+.group-h{display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--muted);padding:0 4px;margin-bottom:-8px;text-transform:uppercase;letter-spacing:.05em}
+.empty{text-align:center;padding:32px 20px;color:var(--muted);background:var(--surface);border-radius:var(--r)}
+.empty b{display:block;color:var(--fg);font-size:16px;margin-bottom:4px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:var(--surface);border-radius:var(--r);padding:12px 14px;min-width:0}
+.stat span{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.stat b{display:block;font-size:18px;margin-top:2px;font-family:var(--font-display)}
+.chart{background:var(--surface);border-radius:var(--r);padding:14px 12px 8px}
+.chart svg{width:100%;height:auto;display:block}
+.chart .ax{fill:var(--muted);font-size:11px;font-family:var(--font)}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);padding:0 4px 8px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+/* tab bar */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(5,1fr)}
+/* diesel calculator */
+.calc{display:flex;flex-direction:column;gap:14px}
+.calc-l{font-size:13px;color:var(--muted);font-weight:600}
+.calc-in{display:flex;align-items:baseline;gap:8px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-top:-6px}
+.calc-in input{flex:1;min-width:0;width:100%;border:0;background:transparent;font-family:var(--font-display);font-size:48px;font-weight:700;letter-spacing:-.03em;outline:none;padding:0;font-variant-numeric:tabular-nums}
+.calc-in input::placeholder{color:color-mix(in srgb,var(--muted) 45%,transparent)}
+.calc-in span{font-size:24px;color:var(--muted);font-weight:600}
+.calc-out{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.calc-out span{font-size:15px;color:var(--muted)}
+.calc-out b{font-family:var(--font-display);font-size:30px;font-weight:700;letter-spacing:-.02em;color:var(--c-fuel)}
+.price-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-radius:12px;background:color-mix(in srgb,var(--c-fuel) 13%,transparent);text-align:left;width:100%}
+.price-btn b{font-size:16px}
+.price-btn span{font-size:13px;color:var(--muted)}
+.price-btn em{font-style:normal;font-weight:600;color:var(--c-fuel);font-size:14px}
+.quick{display:flex;gap:8px;flex-wrap:wrap}
+.quick button{flex:1;min-width:56px;padding:8px 0;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-weight:600;font-size:14px}
+nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding-block:8px 6px;font-size:11px;font-weight:600;color:var(--muted)}
+nav.tabs button svg{width:24px;height:24px}
+nav.tabs button[aria-current="page"]{color:var(--accent)}
+
+/* sheet */
+.scrim{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.35);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:560px;max-height:92%;overflow-y:auto;border-radius:18px 18px 0 0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px calc(20px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
+@media (min-width:600px){.scrim{align-items:center}.sheet{border-radius:18px}}
+@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 12px;position:sticky;top:-10px;background:var(--bg);z-index:1}
+.sheet-h h3{margin:0;font-family:var(--font-display);font-size:19px;font-weight:700}
+.sheet-h .x{color:var(--accent);font-weight:600;font-size:16px;padding:6px 2px}
+.form{display:flex;flex-direction:column;gap:14px}
+.fields{background:var(--surface);border-radius:var(--r);overflow:hidden}
+.field{display:flex;align-items:center;gap:12px;padding:0 16px;min-height:48px;position:relative}
+.field + .field::before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:var(--line)}
+.field label{flex:none;width:42%;max-width:170px;font-size:15px}
+.field input,.field select,.field textarea{flex:1;min-width:0;border:0;background:transparent;padding:13px 0;text-align:right;outline:none}
+.field textarea{text-align:left;resize:vertical;min-height:60px}
+.field input::placeholder,.field textarea::placeholder{color:color-mix(in srgb,var(--muted) 70%,transparent)}
+.field .unit{color:var(--muted);font-size:14px}
+.field.computed{background:var(--accent-soft)}
+.field.computed b{flex:1;text-align:right;font-size:18px;font-family:var(--font-display);color:var(--accent)}
+.hint{font-size:13px;color:var(--muted);padding:0 4px;margin-top:-6px}
+.err{color:var(--neg);font-size:14px;padding:0 4px}
+.row-btns{display:flex;gap:10px}
+.row-btns .btn{flex:1}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><small>Transport service</small><h1>Gunasinghe Group</h1></div>
+    <span class="plate num" id="plate" hidden></span>
+    <button class="icon-btn" id="openSettings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </div>
+</header>
+
+<main><div class="wrap" id="view"></div></main>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap">
+    <button data-tab="overview" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Overview</button>
+    <button data-tab="hires"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8z"/><circle cx="6" cy="17.5" r="1.8" fill="var(--surface)"/><circle cx="17" cy="17.5" r="1.8" fill="var(--surface)"/></svg>Hires</button>
+    <button data-tab="diesel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M6 8h6M14 10h2.5a1.5 1.5 0 0 1 1.5 1.5V17a1.5 1.5 0 0 0 3 0V8l-3-3"/></svg>Diesel</button>
+    <button data-tab="costs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3"/></svg>Costs</button>
+    <button data-tab="driver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Driver</button>
+  </div>
+</nav>
+
+<div id="scrim" class="scrim" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+
+<script src="config.js"></script>
+<script src="/api/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.js"></script>
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = v => { const n = parseFloat(String(v ?? '').replace(/,/g,'')); return isFinite(n) ? n : 0; };
+const rs = n => 'Rs ' + Math.round(n).toLocaleString('en-US');
+const pad = n => String(n).padStart(2,'0');
+const iso = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const today = () => iso(new Date());
+const weekStart = s => { const d = parse(s); d.setDate(d.getDate() - (d.getDay()+6)%7); return iso(d); };
+const addDays = (s,n) => { const d = parse(s); d.setDate(d.getDate()+n); return iso(d); };
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const monthKey = s => s.slice(0,7);
+const monthLabel = k => { const [y,m] = k.split('-').map(Number); return MON[m-1]+' '+y; };
+const weekLabel = ws => { const a = parse(ws), b = parse(addDays(ws,6));
+  return a.getMonth()===b.getMonth() ? a.getDate()+' – '+b.getDate()+' '+MON[b.getMonth()] : a.getDate()+' '+MON[a.getMonth()]+' – '+b.getDate()+' '+MON[b.getMonth()]; };
+const short = n => { const a = Math.abs(n); return a>=1e6 ? (n/1e6).toFixed(1).replace(/\.0$/,'')+'M' : a>=1000 ? Math.round(n/1000)+'k' : String(Math.round(n)); };
+
+const TYPES = {
+  fuel:{label:'Fuel', color:'var(--c-fuel)'},
+  repair:{label:'Repairs', color:'var(--c-repair)'},
+  loan:{label:'Loan', color:'var(--c-loan)'},
+  insurance:{label:'Insurance & licence', short:'Insurance', color:'var(--c-ins)'},
+  toll:{label:'Highway bills', short:'Highway', color:'var(--c-toll)'},
+  other:{label:'Other', color:'var(--c-other)'}
+};
+const INS_KINDS = ['Insurance','Revenue licence','Emission test','Fitness certificate','Other permit'];
+const TOLL_KINDS = ['Highway bill','Gate pass'];
+const billsOwed = () => S.expenses.filter(x=>x.type==='toll' && x.reimbursed===false);
+function tollSub(x){
+  const h = x.hireId && S.hires.find(h=>h.id===x.hireId);
+  return [x.place, x.billNo?'No. '+x.billNo:'', h?'for '+(h.customer||'hire'):''].filter(Boolean).join(' · ') || (x.kind||'Highway bill');
+}
+let assetsCap = null;
+const DEF = {vehicle:'', driver:'', driverMode:'fixed', driverValue:'', diesel:397, kmRate:'', dayRate:'', loan:'', insExp:'', licExp:'', emiExp:''};
+
+const S = {hires:[], expenses:[], payouts:[], passes:[], settingsDoc:null, loaded:{hires:false,expenses:false,payouts:false,passes:false},
+  tab:'overview', period:'month', hireFilter:'all', costFilter:'all', status:'connecting'};
+const settings = () => Object.assign({}, DEF, S.settingsDoc || {});
+let db = null, userCap = null, meId = null, canWrite = true;
+
+/* ---------- money logic ---------- */
+function hireTotal(h){
+  const base = h.mode==='km' ? num(h.km)*num(h.kmRate) : h.mode==='day' ? num(h.days)*num(h.dayRate) : num(h.amount);
+  return base + num(h.extra);
+}
+function defaultDriverPay(total){
+  const st = settings();
+  if (st.driverMode==='percent') return Math.round(total*num(st.driverValue)/100);
+  return num(st.driverValue);
+}
+function range(period){
+  const t = today();
+  if (period==='week'){ const a = weekStart(t); return [a, addDays(a,6)]; }
+  if (period==='month') return [t.slice(0,7)+'-01', t.slice(0,7)+'-31'];
+  if (period==='year') return [t.slice(0,4)+'-01-01', t.slice(0,4)+'-12-31'];
+  return ['0000-00-00','9999-99-99'];
+}
+const inR = (d,[a,b]) => d>=a && d<=b;
+function summarize(r){
+  const hires = S.hires.filter(h=>inR(h.date,r));
+  const exps = S.expenses.filter(e=>inR(e.date,r));
+  const income = hires.reduce((s,h)=>s+num(h.total),0);
+  const driver = hires.reduce((s,h)=>s+num(h.driverPay),0);
+  const byType = {fuel:0,repair:0,loan:0,insurance:0,toll:0,other:0};
+  exps.forEach(e=>{ byType[e.type in byType ? e.type : 'other'] += num(e.amount); });
+  const costs = driver + Object.values(byType).reduce((a,b)=>a+b,0);
+  const litres = exps.filter(e=>e.type==='fuel').reduce((s,e)=>s+num(e.litres),0);
+  const km = hires.reduce((s,h)=>s+(h.mode==='km'?num(h.km):0),0);
+  return {hires, exps, income, driver, byType, costs, profit:income-costs, litres, km};
+}
+function driverWeeks(){
+  const m = {};
+  const get = k => m[k] || (m[k] = {week:k, earned:0, count:0, paid:0, payouts:[]});
+  S.hires.forEach(h=>{ const w = get(weekStart(h.date)); w.earned += num(h.driverPay); w.count++; });
+  S.payouts.forEach(p=>{ const w = get(p.week || weekStart(p.date)); w.paid += num(p.amount); w.payouts.push(p); });
+  return Object.values(m).sort((a,b)=>b.week.localeCompare(a.week));
+}
+
+/* ---------- rendering ---------- */
+const loading = () => !(S.loaded.hires && S.loaded.expenses && S.loaded.payouts && S.loaded.passes);
+function banner(){
+  if (S.status==='offline') return `<div class="banner">The app isn't connected to Supabase yet. In Vercel, open this project's Storage tab, connect Supabase, then redeploy.</div>`;
+  if (S.status==='slow') return `<div class="banner">Can't reach the saved records yet. Check your connection; the page will update when it connects.</div>`;
+  if (S.status==='denied') return `<div class="banner">Your account isn't on the members list. Ask the owner to add your email to the members table in Supabase.</div>`;
+  if (!canWrite) return `<div class="banner">You can view this record but not change it.</div>`;
+  return '';
+}
+function seg(name, opts, cur){
+  return `<div class="seg" role="group">${opts.map(([v,l])=>`<button data-${name}="${v}" aria-pressed="${v===cur}">${l}</button>`).join('')}</div>`;
+}
+function emptyBox(title, text){ return `<div class="empty"><b>${title}</b>${text}</div>`; }
+
+function renderOverview(){
+  const r = range(S.period), s = summarize(r);
+  const st = settings();
+  const periodName = {week:'this week', month:'this month', year:'this year', all:'all time'}[S.period];
+  const pending = S.hires.filter(h=>!h.paid);
+  const pendingAmt = pending.reduce((a,h)=>a+num(h.total),0);
+  const owed = driverWeeks().reduce((a,w)=>a+w.earned-w.paid,0) + billsOwed().reduce((a,x)=>a+num(x.amount),0);
+  const maxCost = Math.max(1, s.driver, ...Object.values(s.byType));
+  const costRows = [['Driver pay', s.driver, 'var(--c-driver)'], ...Object.keys(TYPES).map(k=>[TYPES[k].label, s.byType[k], TYPES[k].color])];
+
+  // renewals
+  const t = today();
+  const ren = [['Insurance',st.insExp],['Revenue licence',st.licExp],['Emission test',st.emiExp]].filter(x=>x[1]).map(([l,d])=>{
+    const days = Math.round((parse(d)-parse(t))/864e5); return {l,d,days};
+  }).filter(x=>x.days<=30);
+
+  let html = banner();
+  html += seg('period', [['week','Week'],['month','Month'],['year','Year'],['all','All']], S.period);
+  html += `<div class="card hero">
+    <div class="label">Net profit ${periodName}</div>
+    <div class="big num ${s.profit<0?'neg':''}">${loading()&&S.status!=='offline'?'—':rs(s.profit)}</div>
+    <div class="sub num"><span>${s.hires.length} hire${s.hires.length===1?'':'s'}</span><span>Income ${rs(s.income)}</span><span>Costs ${rs(s.costs)}</span></div>
+  </div>`;
+  html += `<div class="actions"><button class="btn primary" data-new="hire" ${canWrite&&db?'':'disabled'}>＋ New hire</button><button class="btn" data-new="cost" ${canWrite&&db?'':'disabled'}>＋ Add cost</button><button class="btn" data-new="toll" ${canWrite&&db?'':'disabled'}>＋ Highway bill</button><button class="btn" data-new="pass" ${canWrite&&db?'':'disabled'}>＋ Gate pass</button></div>`;
+
+  if (ren.length){
+    html += `<div class="rows">${ren.map(x=>`<div class="row"><div class="main"><div class="t">${x.l} ${x.days<0?'expired':'renewal due'}</div><div class="s">${fmtDate(x.d)}</div></div><span class="pill ${x.days<0?'bad':'due'}">${x.days<0?Math.abs(x.days)+' days ago':x.days===0?'Today':'in '+x.days+' days'}</span></div>`).join('')}</div>`;
+  }
+
+  html += `<div class="rows brk">
+    <div class="row"><span class="dot" style="background:var(--accent)"></span><div class="main"><div class="t">Hire income</div></div><div class="amt num">${rs(s.income)}</div></div>
+    ${costRows.map(([l,v,c])=>`<div class="row"><span class="dot" style="background:${c}"></span><div class="main"><div class="t">${l}</div></div><div class="amt num">${v?'− '+rs(v):'<span style="color:var(--muted)">—</span>'}</div><div class="bar"><i style="width:${(v/maxCost*100).toFixed(1)}%;background:${c}"></i></div></div>`).join('')}
+    <div class="row total"><span class="dot" style="background:transparent"></span><div class="main"><div class="t">Profit</div></div><div class="amt num" style="color:${s.profit<0?'var(--neg)':'var(--accent)'}">${rs(s.profit)}</div></div>
+  </div>`;
+
+  html += `<div class="stats">
+    <button class="stat" data-goto="hires" style="text-align:left"><span>Customers still to pay</span><b class="num" style="color:${pendingAmt?'var(--warn)':'inherit'}">${rs(pendingAmt)}</b><span>${pending.length} hire${pending.length===1?'':'s'}</span></button>
+    <button class="stat" data-goto="driver" style="text-align:left"><span>Owed to driver</span><b class="num">${rs(owed)}</b><span>pay + bills</span></button>
+    <div class="stat"><span>Diesel ${periodName}</span><b class="num">${s.litres?s.litres.toLocaleString('en-US',{maximumFractionDigits:1})+' L':'—'}</b><span>${s.litres?'avg Rs '+(s.byType.fuel/s.litres).toFixed(0)+'/L':'Rs '+num(st.diesel)+'/L now'}</span></div>
+    <div class="stat"><span>Profit per hire</span><b class="num">${s.hires.length?rs(s.profit/s.hires.length):'—'}</b><span>${s.km?s.km.toLocaleString('en-US')+' km billed':'after all costs'}</span></div>
+  </div>`;
+
+  html += `<div class="section-title"><h2>Last 6 months</h2><span>Income vs costs</span></div>` + chart();
+  return html;
+}
+
+function chart(){
+  const t = today(); const d = parse(t.slice(0,7)+'-01'); const months = [];
+  for (let i=5;i>=0;i--){ const x = new Date(d.getFullYear(), d.getMonth()-i, 1); months.push(iso(x).slice(0,7)); }
+  const data = months.map(k=>{ const s = summarize([k+'-01',k+'-31']); return {k, inc:s.income, cost:s.costs}; });
+  const max = Math.max(...data.map(x=>Math.max(x.inc,x.cost)));
+  const nice = (()=>{ if (max<=0) return 100000; const p = Math.pow(10, Math.floor(Math.log10(max))); const f = max/p; return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p; })();
+  const W=600,H=210,L=44,R=8,T=10,B=26, ih=H-T-B, iw=W-L-R, gw=iw/6, bw=Math.min(26,gw*0.3);
+  const y = v => T + ih - (v/nice)*ih;
+  let g = '';
+  [0, nice/2, nice].forEach(v=>{ g += `<line class="grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${L-8}" y="${y(v)+4}" text-anchor="end">${short(v)}</text>`; });
+  data.forEach((m,i)=>{
+    const cx = L + gw*i + gw/2;
+    const hi = Math.max(0, (m.inc/nice)*ih), hc = Math.max(0,(m.cost/nice)*ih);
+    g += `<rect x="${cx-bw-2}" y="${T+ih-hi}" width="${bw}" height="${hi}" rx="3" fill="var(--accent)"><title>${monthLabel(m.k)} income ${rs(m.inc)}</title></rect>`;
+    g += `<rect x="${cx+2}" y="${T+ih-hc}" width="${bw}" height="${hc}" rx="3" fill="var(--c-other)"><title>${monthLabel(m.k)} costs ${rs(m.cost)}</title></rect>`;
+    g += `<text class="ax" x="${cx}" y="${H-8}" text-anchor="middle">${MON[+m.k.slice(5)-1]}</text>`;
+  });
+  return `<div class="chart"><div class="legend"><span><i style="background:var(--accent)"></i>Income</span><span><i style="background:var(--c-other)"></i>Costs</span></div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Monthly income and costs">${g}</svg></div>`;
+}
+
+function fmtDate(s){ const d = parse(s); return DOW[d.getDay()]+', '+d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear(); }
+function datebox(s){ const d = parse(s); return `<div class="datebox"><b class="num">${d.getDate()}</b><span>${DOW[d.getDay()]}</span></div>`; }
+
+function grouped(items, rowFn, amtFn, fmt){
+  fmt = fmt || rs;
+  const groups = {};
+  items.forEach(x=>{ (groups[monthKey(x.date)] ||= []).push(x); });
+  return Object.keys(groups).sort().reverse().map(k=>{
+    const list = groups[k].sort((a,b)=>b.date.localeCompare(a.date) || (b.createdAt||0)-(a.createdAt||0));
+    return `<div class="group-h"><span>${monthLabel(k)}</span><span class="num">${fmt(list.reduce((s,x)=>s+amtFn(x),0))}</span></div><div class="rows">${list.map(rowFn).join('')}</div>`;
+  }).join('');
+}
+
+function renderPasses(html){
+  if (loading() && S.status!=='offline' && !S.passes.length) return html + emptyBox('Loading gate passes…','');
+  if (!S.passes.length) return html + emptyBox('No gate passes yet','Tap New gate pass to keep the pass number, where it was issued and a photo. Link it to the hire it was for.');
+  return html + grouped(S.passes.slice(), g=>{
+    const h = g.hireId && S.hires.find(x=>x.id===g.hireId);
+    return `<button class="row" data-edit-pass="${esc(g.id)}">${datebox(g.date)}<span class="dot" style="background:var(--c-ins)"></span><div class="main"><div class="t">${esc(g.passNo ? 'Pass '+g.passNo : 'Gate pass')}</div><div class="s">${esc([g.place, h?'for '+(h.customer||'hire'):''].filter(Boolean).join(' · ') || 'No details')}</div></div><div class="amt">${g.photo?'<small>Photo</small>':''}</div></button>`;
+  }, ()=>1, n=>n+' pass'+(n===1?'':'es'));
+}
+function renderHires(){
+  let list = S.hires.slice();
+  if (S.hireFilter==='pending') list = list.filter(h=>!h.paid);
+  const gp = S.hireFilter==='passes';
+  let html = banner() + `<div class="section-title"><h2>${gp?'Gate passes':'Hires'}</h2>${gp?`<button class="btn small primary" data-new="pass" ${canWrite&&db?'':'disabled'}>＋ New gate pass</button>`:`<button class="btn small primary" data-new="hire" ${canWrite&&db?'':'disabled'}>＋ New hire</button>`}</div>`;
+  const pc = S.hires.filter(h=>!h.paid).length;
+  html += `<div class="chips"><button class="chip" data-hf="all" aria-pressed="${S.hireFilter==='all'}">All hires</button><button class="chip" data-hf="pending" aria-pressed="${S.hireFilter==='pending'}">Not paid yet${pc?' · '+pc:''}</button><button class="chip" data-hf="passes" aria-pressed="${gp}">Gate passes${S.passes.length?' · '+S.passes.length:''}</button></div>`;
+  if (gp) return renderPasses(html);
+  if (loading() && S.status!=='offline' && !S.hires.length) return html + emptyBox('Loading hires…','');
+  if (!list.length) return html + (S.hireFilter==='pending' ? emptyBox('Every customer has paid','Nothing outstanding.') : emptyBox('No hires yet','Tap New hire after each job. Enter the customer, route and price; the driver’s pay is filled in from your settings.'));
+  html += grouped(list, h=>{
+    const route = [h.from,h.to].filter(Boolean).join(' → ');
+    const how = h.mode==='km' ? `${num(h.km)} km × ${num(h.kmRate)}` : h.mode==='day' ? `${num(h.days)} day${num(h.days)===1?'':'s'}` : 'Fixed';
+    return `<button class="row" data-edit-hire="${esc(h.id)}">${datebox(h.date)}<div class="main"><div class="t">${esc(h.customer||'Customer')}</div><div class="s">${esc(route||h.goods||how)}${route?' · '+how:''}${(()=>{ const n = S.passes.filter(g=>g.hireId===h.id).length; return n?' · '+n+' gate pass'+(n===1?'':'es'):''; })()}</div></div><div class="amt num">${rs(h.total)}<small>${h.paid?'<span class="pill ok">Paid</span>':'<span class="pill due">Not paid</span>'}</small></div></button>`;
+  }, h=>num(h.total));
+  return html;
+}
+
+function renderCosts(){
+  let list = S.expenses.slice();
+  if (S.costFilter!=='all') list = list.filter(e=>e.type===S.costFilter);
+  let html = banner() + `<div class="section-title"><h2>Costs</h2><button class="btn small primary" data-new="cost" ${canWrite&&db?'':'disabled'}>＋ Add cost</button></div>`;
+  html += `<div class="chips"><button class="chip" data-cf="all" aria-pressed="${S.costFilter==='all'}">All</button>${Object.keys(TYPES).map(k=>`<button class="chip" data-cf="${k}" aria-pressed="${S.costFilter===k}">${TYPES[k].short||TYPES[k].label}</button>`).join('')}</div>`;
+  if (loading() && S.status!=='offline' && !S.expenses.length) return html + emptyBox('Loading costs…','');
+  if (!list.length) return html + emptyBox('No costs here yet','Add diesel fill-ups, repairs, the monthly loan installment and insurance or licence renewals as you pay them.');
+  html += grouped(list, e=>{
+    const T = TYPES[e.type]||TYPES.other;
+    let sub = e.type==='fuel' ? `${num(e.litres)||'?'} L × Rs ${num(e.price)}${e.odo?' · '+num(e.odo).toLocaleString('en-US')+' km':''}` : e.type==='insurance' ? (e.kind||'Insurance') : (e.desc||T.label);
+    let title = e.type==='fuel' ? 'Diesel' : e.type==='repair' ? (e.desc||'Repair') : e.type==='loan' ? 'Loan installment' : e.type==='insurance' ? (e.kind||'Insurance') : (e.desc||'Other');
+    if (e.type==='toll'){ title = e.kind||'Highway bill'; sub = tollSub(e); }
+    if (e.type==='repair') sub = e.garage || 'Repair'; if (e.type==='loan') sub = e.desc || 'Lorry loan'; if (e.type==='insurance') sub = e.desc || 'Insurance & licence'; if (e.type==='other') sub = 'Other';
+    return `<button class="row" data-edit-cost="${esc(e.id)}">${datebox(e.date)}<span class="dot" style="background:${T.color}"></span><div class="main"><div class="t">${esc(title)}</div><div class="s">${esc(sub)}</div></div><div class="amt num">${rs(e.amount)}${e.type==='toll'&&e.reimbursed===false?'<small><span class="pill due">To pay back</span></small>':e.photo?'<small>Photo</small>':''}</div></button>`;
+  }, e=>num(e.amount));
+  return html;
+}
+
+function renderDriver(){
+  const st = settings(); const weeks = driverWeeks();
+  const earned = weeks.reduce((a,w)=>a+w.earned,0), paid = weeks.reduce((a,w)=>a+w.paid,0), wageOwed = earned-paid;
+  const bills = billsOwed(), billAmt = bills.reduce((a,x)=>a+num(x.amount),0), owed = wageOwed + billAmt;
+  const thisWeek = weekStart(today());
+  const w = canWrite&&db ? '' : 'disabled';
+  let html = banner() + `<div class="section-title"><h2>${esc(st.driver||'Driver')}</h2><span>Paid per hire, settled weekly</span></div>`;
+  html += `<div class="card hero"><div class="label">Owed to driver now</div><div class="big num ${owed<0?'neg':''}">${rs(owed)}</div><div class="sub num"><span>Pay ${rs(wageOwed)}</span><span>Bills to pay back ${rs(billAmt)}</span></div></div>`;
+  html += `<div class="actions"><button class="btn primary" data-new="toll" ${w}>＋ Highway bill</button><button class="btn" data-new="payout" ${w}>Record advance</button><button class="btn" id="driverRate">${st.driverMode==='percent'?(num(st.driverValue)||0)+'% per hire':(st.driverValue!==''?rs(st.driverValue)+' per hire':'Set pay per hire')}</button></div>`;
+  if (bills.length){
+    html += `<div class="group-h"><span>Bills to pay back</span><span class="num">${rs(billAmt)}</span></div><div class="rows">${bills.sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="row">${datebox(x.date)}<button class="main" data-edit-cost="${esc(x.id)}" style="text-align:left"><div class="t">${esc(x.kind||'Highway bill')}</div><div class="s">${esc(tollSub(x))}</div></button><button class="btn small primary" data-payback="${esc(x.id)}" data-amt="${num(x.amount)}" ${w}>Pay back ${rs(x.amount)}</button></div>`).join('')}</div>`;
+  }
+  if (!weeks.length) return html + emptyBox('No weeks to settle yet','Each hire adds the driver’s pay to its week (Monday to Sunday). Pay the week here when it ends.');
+  html += `<div class="rows">${weeks.map(w=>{
+    const bal = w.earned - w.paid;
+    const status = bal<=0 ? `<span class="pill ok">${w.earned||w.paid?'Paid':'—'}</span>` : `<button class="btn small primary" data-pay-week="${w.week}" data-amt="${bal}" ${canWrite&&db?'':'disabled'}>Pay ${rs(bal)}</button>`;
+    return `<div class="row"><div class="main"><div class="t">${weekLabel(w.week)}${w.week===thisWeek?' <span class="pill due">This week</span>':''}</div><div class="s num">${w.count} hire${w.count===1?'':'s'} · earned ${rs(w.earned)}${w.paid?' · paid '+rs(w.paid):''}</div></div>${status}</div>`;
+  }).join('')}</div>`;
+  const pays = S.payouts.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  if (pays.length){
+    html += `<div class="group-h"><span>Payments made</span><span class="num">${rs(paid)}</span></div><div class="rows">${pays.map(p=>`<button class="row" data-edit-payout="${esc(p.id)}">${datebox(p.date)}<div class="main"><div class="t">${esc(p.note||'Weekly pay')}</div><div class="s">For week ${weekLabel(p.week||weekStart(p.date))}</div></div><div class="amt num">${rs(p.amount)}</div></button>`).join('')}</div>`;
+  }
+  return html;
+}
+
+function render(){
+  const st = settings();
+  const nav = document.querySelector('nav.tabs'), gear = $('#openSettings');
+  if (S.auth!=='in'){ nav.hidden = true; gear.hidden = true; $('#plate').hidden = true;
+    $('#view').innerHTML = S.status==='offline' ? banner() : S.auth==='login' ? loginView() : S.auth==='setup' ? setupView() : '<div class="empty">Loading…</div>'; return; }
+  nav.hidden = false; gear.hidden = false;
+  const plate = $('#plate'); plate.hidden = !st.vehicle; plate.textContent = st.vehicle;
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-current', b.dataset.tab===S.tab?'page':'false'));
+  const a = document.activeElement, keep = a && a.id && a.closest && a.closest('#view') ? {id:a.id, s:a.selectionStart, e:a.selectionEnd} : null;
+  $('#view').innerHTML = S.tab==='hires' ? renderHires() : S.tab==='costs' ? renderCosts() : S.tab==='driver' ? renderDriver() : S.tab==='diesel' ? renderDiesel() : renderOverview();
+  if (keep){ const el = document.getElementById(keep.id); if (el){ el.focus(); try{ el.setSelectionRange(keep.s, keep.e); }catch(e){} } }
+}
+
+/* ---------- diesel ---------- */
+S.diesel = {litres:'', odo:'', date:''};
+function renderDiesel(){
+  const st = settings(), price = num(st.diesel), D = S.diesel;
+  const fuel = S.expenses.filter(e=>e.type==='fuel');
+  const m = summarize(range('month')), y = summarize(range('year'));
+  // km between fill-ups, from odometer readings
+  const withOdo = fuel.filter(e=>num(e.odo)>0).sort((a,b)=>a.date.localeCompare(b.date) || num(a.odo)-num(b.odo));
+  const gap = {}; withOdo.forEach((e,i)=>{ if (i) gap[e.id] = num(e.odo) - num(withOdo[i-1].odo); });
+  const lastOdo = withOdo.length ? num(withOdo[withOdo.length-1].odo) : 0;
+  let html = banner() + `<div class="section-title"><h2>Diesel</h2><span>Auto Diesel</span></div>`;
+  html += `<div class="card calc">
+    <label class="calc-l" for="d-litres">Litres filled</label>
+    <div class="calc-in"><input id="d-litres" inputmode="decimal" placeholder="0" value="${esc(D.litres)}" autocomplete="off"><span>L</span></div>
+    <div class="quick">${[20,40,60,100].map(n=>`<button data-dq="${n}">${n} L</button>`).join('')}</div>
+    <div class="calc-out"><span>Cost</span><b class="num" id="d-cost">${rs(num(D.litres)*price)}</b></div>
+    <button class="price-btn" data-dprice><div><b class="num">Rs ${price.toLocaleString('en-US')}</b> <span>per litre</span></div><em>Change price</em></button>
+  </div>`;
+  html += `<div class="fields">
+    ${field('d-date','Date',`type="date" value="${esc(D.date||today())}"`)}
+    ${field('d-odo','Odometer',`inputmode="numeric" placeholder="${lastOdo?'Last '+lastOdo.toLocaleString('en-US'):'Optional'}" value="${esc(D.odo)}"`,'km')}
+  </div>
+  <div class="err" id="d-err" hidden></div>
+  <button class="btn primary" id="d-save" ${canWrite&&db?'':'disabled'}>Save fill-up</button>`;
+  html += `<div class="stats">
+    <div class="stat"><span>This month</span><b class="num">${m.litres?m.litres.toLocaleString('en-US',{maximumFractionDigits:1})+' L':'—'}</b><span class="num">${rs(m.byType.fuel)}</span></div>
+    <div class="stat"><span>This year</span><b class="num">${y.litres?y.litres.toLocaleString('en-US',{maximumFractionDigits:1})+' L':'—'}</b><span class="num">${rs(y.byType.fuel)}</span></div>
+  </div>`;
+  if (loading() && S.status!=='offline' && !fuel.length) return html + emptyBox('Loading fill-ups…','');
+  if (!fuel.length) return html + emptyBox('No fill-ups yet','Type the litres above and tap Save fill-up. Add the odometer reading to see the distance between fill-ups.');
+  html += grouped(fuel, e=>{
+    const g = gap[e.id], kmL = g>0 && num(e.litres) ? (g/num(e.litres)).toFixed(1) : null;
+    return `<button class="row" data-edit-cost="${esc(e.id)}">${datebox(e.date)}<div class="main"><div class="t num">${num(e.litres).toLocaleString('en-US',{maximumFractionDigits:2})} L <span style="color:var(--muted);font-weight:500">× Rs ${num(e.price)}</span></div><div class="s num">${e.odo?num(e.odo).toLocaleString('en-US')+' km':'No odometer'}${g>0?' · '+g.toLocaleString('en-US')+' km since last · '+kmL+' km/L':''}</div></div><div class="amt num">${rs(e.amount)}</div></button>`;
+  }, e=>num(e.amount));
+  return html;
+}
+document.addEventListener('input', e=>{
+  if (!e.target.closest('#view')) return;
+  if (e.target.id==='d-litres'){ S.diesel.litres = e.target.value; const c = $('#d-cost'); if (c) c.textContent = rs(num(e.target.value)*num(settings().diesel)); }
+  if (e.target.id==='d-odo') S.diesel.odo = e.target.value;
+  if (e.target.id==='d-date') S.diesel.date = e.target.value;
+});
+async function saveFill(btn){
+  const st = settings(), litres = num(S.diesel.litres), price = num(st.diesel);
+  const err = $('#d-err'); err.hidden = true;
+  if (litres<=0){ err.textContent = 'Enter how many litres you filled.'; err.hidden = false; return; }
+  btn.disabled = true; btn.textContent = 'Saving…';
+  const body = {date:S.diesel.date||today(), type:'fuel', litres, price, amount:Math.round(litres*price), odo:S.diesel.odo?num(S.diesel.odo):null, desc:'', createdAt:Date.now(), updatedAt:Date.now()};
+  if (meId) body.by = meId; if (myName) body.byName = myName;
+  try { await db.collection('expenses').doc().set(body); S.diesel = {litres:'', odo:'', date:''}; render(); }
+  catch(e){ btn.disabled = false; btn.textContent = 'Save fill-up'; err.textContent = e&&e.code==='invalid_argument' ? 'This account is not on the members list in Supabase, so it cannot save.' : 'Could not save. Check your connection and try again.'; err.hidden = false; }
+}
+function openDieselPrice(){
+  const st = settings();
+  openSheet(head('Diesel price') + `<div class="form">
+    <div class="fields">${field('dp-price','Price per litre',`inputmode="decimal" value="${esc(st.diesel)}"`,'Rs')}</div>
+    <div class="hint">CEYPETCO Auto Diesel: Rs 397 from 1 Nov 2026. Prices change at the start of each month. Saved fill-ups keep the price they were bought at.</div>
+    <div class="quick">${[397,543].map(n=>`<button data-dpq="${n}">Rs ${n}${n===397?' Auto':' Super'}</button>`).join('')}</div>
+    <div class="err" id="formErr" hidden></div>
+    <div class="row-btns"><button class="btn primary" data-save ${canWrite&&db?'':'disabled'}>Save price</button></div>
+  </div>`);
+  const sheet = $('#sheet');
+  sheet.querySelector('.quick').addEventListener('click', e=>{ const b = e.target.closest('[data-dpq]'); if (b) $('#dp-price').value = b.dataset.dpq; });
+  sheet.querySelector('[data-save]').addEventListener('click', async ()=>{
+    const p = num(val('dp-price')); if (p<=0) return showErr('Enter the price per litre.');
+    const btn = sheet.querySelector('[data-save]'); btn.disabled = true; btn.textContent = 'Saving…';
+    try { await db.doc('settings/main').set(Object.assign({}, settings(), {diesel:p, updatedAt:Date.now()})); closeSheet(); }
+    catch(e){ btn.disabled = false; btn.textContent = 'Save price'; showErr(e&&e.code==='invalid_argument'?'This account is not on the members list in Supabase, so it cannot save.':'Could not save. Check your connection and try again.'); }
+  });
+}
+
+/* ---------- sheets ---------- */
+function openSheet(html){ $('#sheet').innerHTML = html; $('#scrim').hidden = false; document.body.style.overflow='hidden'; const f = $('#sheet input:not([type=date]),#sheet select'); }
+function closeSheet(){ $('#scrim').hidden = true; $('#sheet').innerHTML=''; document.body.style.overflow=''; }
+$('#scrim').addEventListener('click', e=>{ if (e.target.id==='scrim') closeSheet(); });
+document.addEventListener('keydown', e=>{ if (e.key==='Escape' && !$('#scrim').hidden) closeSheet(); });
+
+const head = (title, editing) => `<div class="sheet-h"><button class="x" data-close>Cancel</button><h3>${title}</h3><span style="width:52px"></span></div>`;
+const field = (id,label,attrs='',unit='') => `<div class="field"><label for="${id}">${label}</label><input id="${id}" ${attrs}>${unit?`<span class="unit">${unit}</span>`:''}</div>`;
+const val = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+const footer = (editing) => `<div class="err" id="formErr" hidden></div><div class="row-btns">${editing?`<button class="btn danger" data-del>Delete</button>`:''}<button class="btn primary" data-save ${canWrite&&db?'':'disabled'}>${editing?'Save changes':'Save'}</button></div><div class="hint" id="byline"></div>`;
+function showErr(msg){ const e = $('#formErr'); e.textContent = msg; e.hidden = false; }
+function armDelete(btn, fn){
+  if (btn.dataset.armed){ fn(); return; }
+  btn.dataset.armed = '1'; btn.textContent = 'Tap again to delete';
+  setTimeout(()=>{ if (btn.isConnected){ delete btn.dataset.armed; btn.textContent='Delete'; } }, 3000);
+}
+async function byline(rec){
+  if (rec && rec.byName){ const el = $('#byline'); if (el) el.textContent = 'Added by ' + rec.byName; return; }
+  if (!rec || !rec.by || !userCap || !userCap.profiles) return;
+  try { const ps = await userCap.profiles([rec.by]); const n = ps && ps[rec.by] && ps[rec.by].name; const el = $('#byline'); if (el && n) el.textContent = 'Added by ' + n; } catch(e){}
+}
+async function save(coll, id, data){
+  const btn = $('#sheet [data-save]'); btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const ref = id ? db.collection(coll).doc(id) : db.collection(coll).doc();
+    const body = Object.assign({}, data, {updatedAt: Date.now()});
+    if (!id){ body.createdAt = Date.now(); if (meId) body.by = meId; if (myName) body.byName = myName; }
+    else { const old = (S[coll]||[]).find(x=>x.id===id); if (old){ if (old.createdAt) body.createdAt = old.createdAt; if (old.by) body.by = old.by; if (old.byName) body.byName = old.byName; } }
+    await ref.set(body);
+    closeSheet();
+  } catch(e){
+    btn.disabled = false; btn.textContent = 'Save';
+    if (e && e.code==='invalid_argument'){ canWrite = false; render(); showErr('This account is not on the members list in Supabase, so it cannot save.'); }
+    else if (e && e.code==='quota_exceeded') showErr('Storage is full. Delete some old entries and try again.');
+    else showErr('Could not save. Check your connection and try again.');
+  }
+}
+async function remove(coll, id){
+  try { await db.collection(coll).doc(id).delete(); closeSheet(); } catch(e){ showErr('Could not delete. Check your connection and try again.'); }
+}
+
+/* hire sheet */
+function openHire(h){
+  const st = settings(); const editing = !!h;
+  h = h || {date:today(), mode:'fixed', kmRate:st.kmRate, dayRate:st.dayRate, paid:false};
+  let mode = h.mode || 'fixed', paid = !!h.paid, driverDirty = editing;
+  openSheet(head(editing?'Edit hire':'New hire') + `<div class="form">
+    <div class="fields">
+      ${field('h-date','Date',`type="date" value="${esc(h.date)}"`)}
+      ${field('h-customer','Customer',`placeholder="Name or company" value="${esc(h.customer)}" autocomplete="off"`)}
+      ${field('h-from','From',`placeholder="Negombo" value="${esc(h.from)}"`)}
+      ${field('h-to','To',`placeholder="Kandy" value="${esc(h.to)}"`)}
+      ${field('h-goods','Load',`placeholder="Bricks, furniture…" value="${esc(h.goods)}"`)}
+    </div>
+    <div class="seg" id="h-mode">${[['fixed','Fixed price'],['km','Per km'],['day','Per day']].map(([v,l])=>`<button data-m="${v}" aria-pressed="${v===mode}">${l}</button>`).join('')}</div>
+    <div class="fields">
+      <div data-show="fixed">${field('h-amount','Hire price',`inputmode="decimal" placeholder="0" value="${esc(h.amount)}"`,'Rs')}</div>
+      <div data-show="km">${field('h-km','Distance',`inputmode="decimal" placeholder="0" value="${esc(h.km)}"`,'km')}${field('h-kmrate','Rate per km',`inputmode="decimal" placeholder="0" value="${esc(h.kmRate)}"`,'Rs')}</div>
+      <div data-show="day">${field('h-days','Days',`inputmode="decimal" placeholder="1" value="${esc(h.days)}"`)}${field('h-dayrate','Rate per day',`inputmode="decimal" placeholder="0" value="${esc(h.dayRate)}"`,'Rs')}</div>
+      ${field('h-extra','Extra charges',`inputmode="decimal" placeholder="Waiting, loading…" value="${esc(h.extra)}"`,'Rs')}
+      <div class="field computed"><label>Total</label><b class="num" id="h-total">Rs 0</b></div>
+    </div>
+    <div class="fields">
+      ${field('h-driver','Driver pay',`inputmode="decimal" placeholder="0" value="${esc(h.driverPay)}"`,'Rs')}
+    </div>
+    <div class="hint" id="h-driverhint"></div>
+    <div class="seg" id="h-paid"><button data-p="0" aria-pressed="${!paid}">Not paid yet</button><button data-p="1" aria-pressed="${paid}">Customer paid</button></div>
+    ${editing ? (()=>{ const lb = S.expenses.filter(x=>x.type==='toll'&&x.hireId===h.id), gp = S.passes.filter(g=>g.hireId===h.id); const parts = []; if (lb.length) parts.push(`Highway bills: ${rs(lb.reduce((a,x)=>a+num(x.amount),0))} (${lb.length})`); if (gp.length) parts.push(`Gate passes: ${gp.map(g=>g.passNo||'no number').join(', ')}`); return parts.length ? `<div class="hint">${esc(parts.join(' · '))}</div>` : ''; })() : ''}
+    <div class="fields"><div class="field"><textarea id="h-notes" placeholder="Notes (phone number, lorry was late…)">${esc(h.notes)}</textarea></div></div>
+    ${footer(editing)}
+  </div>`);
+  const sheet = $('#sheet');
+  const show = () => sheet.querySelectorAll('[data-show]').forEach(el=>el.hidden = el.dataset.show!==mode);
+  const read = () => ({mode, amount:val('h-amount'), km:val('h-km'), kmRate:val('h-kmrate'), days:val('h-days'), dayRate:val('h-dayrate'), extra:val('h-extra')});
+  const recalc = () => {
+    const total = hireTotal(read());
+    $('#h-total').textContent = rs(total);
+    if (!driverDirty){ const d = defaultDriverPay(total); $('#h-driver').value = d ? d : ''; }
+    const hint = st.driverMode==='percent' ? `Default: ${num(st.driverValue)}% of the total` : st.driverValue!=='' ? `Default: ${rs(st.driverValue)} per hire` : 'Set a default driver rate in Settings';
+    $('#h-driverhint').textContent = hint + (driverDirty?' · edited for this hire':'');
+  };
+  show(); recalc();
+  sheet.querySelector('#h-mode').addEventListener('click', e=>{ const b = e.target.closest('[data-m]'); if(!b) return; mode = b.dataset.m; sheet.querySelectorAll('#h-mode button').forEach(x=>x.setAttribute('aria-pressed', x===b)); show(); recalc(); });
+  sheet.querySelector('#h-paid').addEventListener('click', e=>{ const b = e.target.closest('[data-p]'); if(!b) return; paid = b.dataset.p==='1'; sheet.querySelectorAll('#h-paid button').forEach(x=>x.setAttribute('aria-pressed', x===b)); });
+  sheet.addEventListener('input', e=>{ if (e.target.id==='h-driver'){ driverDirty = true; recalc(); } else recalc(); });
+  sheet.querySelector('[data-save]').addEventListener('click', ()=>{
+    const data = Object.assign(read(), {date:val('h-date'), customer:val('h-customer'), from:val('h-from'), to:val('h-to'), goods:val('h-goods'), driverPay:num(val('h-driver')), paid, notes:val('h-notes')});
+    data.total = hireTotal(data);
+    if (!data.date) return showErr('Pick the date of the hire.');
+    if (data.total<=0) return showErr(mode==='km'?'Enter the distance and rate per km.':mode==='day'?'Enter the days and rate per day.':'Enter the hire price.');
+    save('hires', editing?h.id:null, data);
+  });
+  const del = sheet.querySelector('[data-del]'); if (del) del.addEventListener('click', ()=>armDelete(del, ()=>remove('hires', h.id)));
+  byline(editing?h:null);
+}
+
+/* cost sheet */
+async function compressImage(file){
+  const url = URL.createObjectURL(file);
+  try {
+    const img = new Image();
+    await new Promise((res,rej)=>{ img.onload = res; img.onerror = rej; img.src = url; });
+    const s = Math.min(1, 1600/Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth*s); c.height = Math.round(img.naturalHeight*s);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return await new Promise(r=>c.toBlob(r, 'image/jpeg', 0.82));
+  } finally { URL.revokeObjectURL(url); }
+}
+function openCost(e, preset){
+  const st = settings(); const editing = !!e;
+  const startType = preset || (S.costFilter!=='all' ? S.costFilter : 'fuel');
+  e = e || {date:today(), type:startType, price:st.diesel, kind: startType==='toll' ? 'Highway bill' : '', reimbursed:true};
+  let type = e.type || 'fuel', amtDirty = editing, reimb = e.reimbursed!==false;
+  const tkind = 'Highway bill';
+  let photo = e.photo || null, newBlob = null, newUrl = null;
+  const hires = S.hires.filter(h=>h.date>=addDays(today(),-45) || h.id===e.hireId).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,40);
+  const hireOpt = h => { const d = parse(h.date); return `${d.getDate()} ${MON[d.getMonth()]} · ${h.customer||'Customer'}${h.to?' → '+h.to:''}`; };
+  openSheet(head(editing?'Edit cost':'Add cost') + `<div class="form">
+    <div class="chips wrapc" id="c-type">${Object.keys(TYPES).map(k=>`<button class="chip" data-t="${k}" aria-pressed="${k===type}">${TYPES[k].short||TYPES[k].label}</button>`).join('')}</div>
+    <div class="fields">
+      ${field('c-date','Date',`type="date" value="${esc(e.date)}"`)}
+      <div data-show="fuel">${field('c-litres','Litres',`inputmode="decimal" placeholder="0" value="${esc(e.litres)}"`,'L')}${field('c-price','Price per litre',`inputmode="decimal" value="${esc(e.price ?? st.diesel)}"`,'Rs')}${field('c-odo','Odometer',`inputmode="numeric" placeholder="Optional" value="${esc(e.odo)}"`,'km')}</div>
+      <div data-show="insurance"><div class="field"><label for="c-kind">Type</label><select id="c-kind">${INS_KINDS.map(k=>`<option ${k===(e.kind||'Insurance')?'selected':''}>${k}</option>`).join('')}</select></div></div>
+      <div data-show="toll">${field('c-place','Where',`placeholder="Kadawatha → Kurunegala" value="${esc(e.place)}"`)}${field('c-billno','Bill no.',`placeholder="Optional" value="${esc(e.billNo)}"`)}
+        <div class="field"><label for="c-hire">For hire</label><select id="c-hire"><option value="">Not linked</option>${hires.map(h=>`<option value="${esc(h.id)}" ${h.id===e.hireId?'selected':''}>${esc(hireOpt(h))}</option>`).join('')}</select></div></div>
+      <div data-show="repair,other,loan,insurance">${field('c-desc','What for',`placeholder="Service, tyres…" value="${esc(e.desc)}"`)}</div>
+      <div data-show="repair">${field('c-garage','Garage',`placeholder="Optional" value="${esc(e.garage)}"`)}</div>
+      ${field('c-amount','Amount',`inputmode="decimal" placeholder="0" value="${esc(e.amount)}"`,'Rs')}
+    </div>
+    <div data-show="toll"><div class="seg" id="c-reimb"><button data-r="1" aria-pressed="${reimb}">Paid back to driver</button><button data-r="0" aria-pressed="${!reimb}">Pay back later</button></div></div>
+    <div class="hint" id="c-hint"></div>
+    <div class="photo" id="c-photo"></div>
+    ${footer(editing)}
+  </div>`);
+  const sheet = $('#sheet');
+  const PH = {repair:'Service, tyres, brake pads…', other:'Parking, washing…', loan:'Lorry loan', insurance:'Company or policy no.'};
+  const drawPhoto = () => {
+    const box = $('#c-photo'); const src = newUrl || photo;
+    if (src) box.innerHTML = `<img ${newUrl?`src="${esc(newUrl)}"`:`data-pid="${esc(photo)}"`} alt="Bill photo" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'hint',textContent:'Photo can’t be shown here.'}))"><button class="btn small" id="c-photo-rm">Remove photo</button>`;
+    else if (assetsCap && canWrite) box.innerHTML = `<label class="btn photo-add" for="c-file">＋ Add photo of the bill</label><input type="file" id="c-file" accept="image/*" hidden>`;
+    else box.innerHTML = '';
+    fillPhotos(box);
+  };
+  const show = () => {
+    sheet.querySelectorAll('[data-show]').forEach(el=>el.hidden = !el.dataset.show.split(',').includes(type));
+    $('#c-desc').placeholder = PH[type] || '';
+    let hint = '';
+    if (type==='fuel') hint = `Diesel is Rs ${num(st.diesel)}/L in your settings. Amount fills from litres × price.`;
+    if (type==='loan' && num(st.loan)) hint = `Monthly installment in settings: ${rs(st.loan)}`;
+    if (type==='insurance') hint = 'Update the renewal date in Settings to get a reminder on the overview.';
+    if (type==='toll') hint = reimb ? 'You paid the driver back when he gave you the bill. Nothing is owed to him for this one.' : 'This amount will show as owed to the driver until you pay it back from the Driver tab.';
+    $('#c-hint').textContent = hint;
+    if (!amtDirty && type==='loan' && num(st.loan)) $('#c-amount').value = num(st.loan);
+  };
+  const recalc = () => { if (type==='fuel' && !amtDirty){ const a = num(val('c-litres'))*num(val('c-price')); $('#c-amount').value = a ? Math.round(a) : ''; } };
+  show(); recalc(); drawPhoto();
+  sheet.querySelector('#c-type').addEventListener('click', ev=>{ const b = ev.target.closest('[data-t]'); if(!b) return; type = b.dataset.t; sheet.querySelectorAll('#c-type button').forEach(x=>x.setAttribute('aria-pressed', x===b)); if(!editing){ amtDirty=false; $('#c-amount').value=''; } show(); recalc(); });
+  sheet.querySelector('#c-reimb').addEventListener('click', ev=>{ const b = ev.target.closest('[data-r]'); if(!b) return; reimb = b.dataset.r==='1'; sheet.querySelectorAll('#c-reimb button').forEach(x=>x.setAttribute('aria-pressed', x===b)); show(); });
+  sheet.addEventListener('input', ev=>{ if (ev.target.id==='c-amount') amtDirty = true; else recalc(); });
+  sheet.addEventListener('change', async ev=>{
+    if (ev.target.id!=='c-file' || !ev.target.files[0]) return;
+    $('#c-photo').innerHTML = '<div class="hint">Preparing photo…</div>';
+    try { newBlob = await compressImage(ev.target.files[0]); if (newUrl) URL.revokeObjectURL(newUrl); newUrl = URL.createObjectURL(newBlob); }
+    catch(err){ newBlob = null; showErr('That file could not be read as a photo. Try a JPG or PNG.'); }
+    drawPhoto();
+  });
+  sheet.addEventListener('click', ev=>{ if (ev.target.id==='c-photo-rm'){ photo = null; newBlob = null; if (newUrl) URL.revokeObjectURL(newUrl); newUrl = null; drawPhoto(); } });
+  sheet.querySelector('[data-save]').addEventListener('click', async ()=>{
+    const data = {date:val('c-date'), type, amount:num(val('c-amount')), desc:val('c-desc')};
+    if (type==='fuel'){ data.litres = num(val('c-litres')); data.price = num(val('c-price')); data.odo = val('c-odo') ? num(val('c-odo')) : null; data.desc = ''; }
+    if (type==='repair') data.garage = val('c-garage');
+    if (type==='insurance') data.kind = val('c-kind');
+    if (type==='toll'){ data.kind = tkind; data.place = val('c-place'); data.billNo = val('c-billno'); data.hireId = val('c-hire') || null; data.desc = '';
+      data.reimbursed = reimb; data.reimbursedAt = reimb ? (e.reimbursed!==false && e.reimbursedAt ? e.reimbursedAt : today()) : null; }
+    if (!data.date) return showErr('Pick the date you paid.');
+    if (data.amount<=0) return showErr(type==='fuel'?'Enter the litres, or type the amount you paid.':'Enter the amount on the bill.');
+    const btn = sheet.querySelector('[data-save]');
+    data.photo = photo;
+    if (newBlob && assetsCap){
+      btn.disabled = true; btn.textContent = 'Uploading photo…';
+      try { const r = await assetsCap.upload(newBlob, {type:'image/jpeg'}); data.photo = r.id; }
+      catch(err){ btn.disabled = false; btn.textContent = editing?'Save changes':'Save'; return showErr(err&&err.code==='too_large' ? 'The photo is too large.' : err&&err.code==='quota_or_state' ? 'Photo storage is full. Save without the photo, or delete old photos.' : 'Could not upload the photo. Try again, or remove it to save without it.'); }
+    }
+    const oldPhoto = editing && e.photo && e.photo!==data.photo ? e.photo : null;
+    await save('expenses', editing?e.id:null, data);
+    if (oldPhoto && assetsCap) assetsCap.delete(oldPhoto).catch(()=>{});
+  });
+  const del = sheet.querySelector('[data-del]'); if (del) del.addEventListener('click', ()=>armDelete(del, async ()=>{ await remove('expenses', e.id); if (e.photo && assetsCap) assetsCap.delete(e.photo).catch(()=>{}); }));
+  byline(editing?e:null);
+}
+
+/* gate pass sheet (record only, no cost) */
+function openPass(p){
+  const editing = !!p; p = p || {date:today()};
+  let photo = p.photo || null, newBlob = null, newUrl = null;
+  const hires = S.hires.filter(h=>h.date>=addDays(today(),-45) || h.id===p.hireId).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,40);
+  const hireOpt = h => { const d = parse(h.date); return `${d.getDate()} ${MON[d.getMonth()]} · ${h.customer||'Customer'}${h.to?' → '+h.to:''}`; };
+  openSheet(head(editing?'Gate pass':'New gate pass') + `<div class="form">
+    <div class="fields">
+      ${field('g-date','Date',`type="date" value="${esc(p.date)}"`)}
+      ${field('g-no','Pass number',`placeholder="GP-00123" value="${esc(p.passNo)}" autocomplete="off"`)}
+      ${field('g-place','Issued at',`placeholder="Colombo Port, factory…" value="${esc(p.place)}"`)}
+      <div class="field"><label for="g-hire">For hire</label><select id="g-hire"><option value="">Not linked</option>${hires.map(h=>`<option value="${esc(h.id)}" ${h.id===p.hireId?'selected':''}>${esc(hireOpt(h))}</option>`).join('')}</select></div>
+    </div>
+    <div class="fields"><div class="field"><textarea id="g-notes" placeholder="Notes (goods, container no., in/out time…)">${esc(p.notes)}</textarea></div></div>
+    <div class="hint">Gate passes are kept as records only. They don't count as a cost.</div>
+    <div class="photo" id="g-photo"></div>
+    ${footer(editing)}
+  </div>`);
+  const sheet = $('#sheet');
+  const drawPhoto = () => {
+    const box = $('#g-photo'); const src = newUrl || photo;
+    if (src) box.innerHTML = `<img ${newUrl?`src="${esc(newUrl)}"`:`data-pid="${esc(photo)}"`} alt="Gate pass photo" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'hint',textContent:'Photo can’t be shown here.'}))"><button class="btn small" id="g-photo-rm">Remove photo</button>`;
+    else if (assetsCap && canWrite) box.innerHTML = `<label class="btn photo-add" for="g-file">＋ Add photo of the pass</label><input type="file" id="g-file" accept="image/*" hidden>`;
+    else box.innerHTML = '';
+    fillPhotos(box);
+  };
+  drawPhoto();
+  sheet.addEventListener('change', async ev=>{
+    if (ev.target.id!=='g-file' || !ev.target.files[0]) return;
+    $('#g-photo').innerHTML = '<div class="hint">Preparing photo…</div>';
+    try { newBlob = await compressImage(ev.target.files[0]); if (newUrl) URL.revokeObjectURL(newUrl); newUrl = URL.createObjectURL(newBlob); }
+    catch(err){ newBlob = null; showErr('That file could not be read as a photo. Try a JPG or PNG.'); }
+    drawPhoto();
+  });
+  sheet.addEventListener('click', ev=>{ if (ev.target.id==='g-photo-rm'){ photo = null; newBlob = null; if (newUrl) URL.revokeObjectURL(newUrl); newUrl = null; drawPhoto(); } });
+  sheet.querySelector('[data-save]').addEventListener('click', async ()=>{
+    const data = {date:val('g-date'), passNo:val('g-no'), place:val('g-place'), hireId:val('g-hire')||null, notes:val('g-notes'), photo};
+    if (!data.date) return showErr('Pick the date of the gate pass.');
+    if (!data.passNo && !data.place && !newBlob && !photo) return showErr('Enter the pass number or where it was issued, or add a photo.');
+    const btn = sheet.querySelector('[data-save]');
+    if (newBlob && assetsCap){
+      btn.disabled = true; btn.textContent = 'Uploading photo…';
+      try { const r = await assetsCap.upload(newBlob, {type:'image/jpeg'}); data.photo = r.id; }
+      catch(err){ btn.disabled = false; btn.textContent = editing?'Save changes':'Save'; return showErr('Could not upload the photo. Try again, or remove it to save without it.'); }
+    }
+    const oldPhoto = editing && p.photo && p.photo!==data.photo ? p.photo : null;
+    await save('passes', editing?p.id:null, data);
+    if (oldPhoto && assetsCap) assetsCap.delete(oldPhoto).catch(()=>{});
+  });
+  const del = sheet.querySelector('[data-del]'); if (del) del.addEventListener('click', ()=>armDelete(del, async ()=>{ await remove('passes', p.id); if (p.photo && assetsCap) assetsCap.delete(p.photo).catch(()=>{}); }));
+  byline(editing?p:null);
+}
+
+/* driver payment sheet */
+function openPayout(p){
+  const editing = !!p; p = p || {date:today()};
+  openSheet(head(editing?'Edit payment':'Record advance') + `<div class="form">
+    <div class="fields">
+      ${field('p-date','Date paid',`type="date" value="${esc(p.date)}"`)}
+      ${field('p-amount','Amount',`inputmode="decimal" placeholder="0" value="${esc(p.amount)}"`,'Rs')}
+      ${field('p-note','Note',`placeholder="Advance, weekly pay…" value="${esc(p.note)}"`)}
+    </div>
+    <div class="hint">Counts against the week of ${editing?weekLabel(p.week||weekStart(p.date)):'the date paid'}.</div>
+    ${footer(editing)}
+  </div>`);
+  const sheet = $('#sheet');
+  sheet.querySelector('[data-save]').addEventListener('click', ()=>{
+    const date = val('p-date'), amount = num(val('p-amount'));
+    if (!date) return showErr('Pick the date you paid the driver.');
+    if (amount<=0) return showErr('Enter the amount paid.');
+    save('payouts', editing?p.id:null, {date, amount, note:val('p-note')||'Advance', week: editing&&p.week ? p.week : weekStart(date)});
+  });
+  const del = sheet.querySelector('[data-del]'); if (del) del.addEventListener('click', ()=>armDelete(del, ()=>remove('payouts', p.id)));
+  byline(editing?p:null);
+}
+
+/* settings sheet */
+function openSettings(){
+  const st = settings(); let dm = st.driverMode;
+  openSheet(head('Settings') + `<div class="form">
+    <div class="fields">
+      ${field('s-vehicle','Lorry number',`placeholder="e.g. LM-4521" value="${esc(st.vehicle)}" autocapitalize="characters"`)}
+      ${field('s-driver','Driver name',`placeholder="Name" value="${esc(st.driver)}"`)}
+    </div>
+    <div class="seg" id="s-dm"><button data-dm="fixed" aria-pressed="${dm==='fixed'}">Fixed per hire</button><button data-dm="percent" aria-pressed="${dm==='percent'}">% of hire</button></div>
+    <div class="fields">${field('s-dv','Driver pay',`inputmode="decimal" placeholder="0" value="${esc(st.driverValue)}"`,`<span id="s-dvu">${dm==='percent'?'%':'Rs'}</span>`)}</div>
+    <div class="hint">Filled into every new hire. You can still change it on each hire.</div>
+    <div class="fields">
+      ${field('s-diesel','Diesel price per litre',`inputmode="decimal" value="${esc(st.diesel)}"`,'Rs')}
+      ${field('s-km','Usual rate per km',`inputmode="decimal" placeholder="Optional" value="${esc(st.kmRate)}"`,'Rs')}
+      ${field('s-day','Usual rate per day',`inputmode="decimal" placeholder="Optional" value="${esc(st.dayRate)}"`,'Rs')}
+      ${field('s-loan','Loan installment',`inputmode="decimal" placeholder="Per month" value="${esc(st.loan)}"`,'Rs')}
+    </div>
+    <div class="hint">CEYPETCO Auto Diesel was Rs 397/L from 1 Nov 2026. Update this when the price changes each month.</div>
+    <div class="fields">
+      ${field('s-ins','Insurance expires',`type="date" value="${esc(st.insExp)}"`)}
+      ${field('s-lic','Revenue licence expires',`type="date" value="${esc(st.licExp)}"`)}
+      ${field('s-emi','Emission test expires',`type="date" value="${esc(st.emiExp)}"`)}
+    </div>
+    <div class="hint">The overview warns you 30 days before each renewal.</div>
+    <div class="err" id="formErr" hidden></div>
+    <div class="row-btns"><button class="btn primary" data-save ${canWrite&&db?'':'disabled'}>Save settings</button></div>
+    <div class="form" id="usersBox"></div>
+    <div class="signed"><span class="hint" style="margin:0">Signed in as ${esc(S.me||myName)}</span><button class="btn small" id="signOut">Sign out</button></div>
+  </div>`);
+  const sheet = $('#sheet');
+  loadUsers();
+  sheet.querySelector('#s-dm').addEventListener('click', e=>{ const b = e.target.closest('[data-dm]'); if(!b) return; dm = b.dataset.dm; sheet.querySelectorAll('#s-dm button').forEach(x=>x.setAttribute('aria-pressed', x===b)); $('#s-dvu').textContent = dm==='percent'?'%':'Rs'; });
+  sheet.querySelector('[data-save]').addEventListener('click', async ()=>{
+    const data = {vehicle:val('s-vehicle').toUpperCase(), driver:val('s-driver'), driverMode:dm, driverValue:val('s-dv')===''?'':num(val('s-dv')),
+      diesel:num(val('s-diesel'))||397, kmRate:val('s-km')===''?'':num(val('s-km')), dayRate:val('s-day')===''?'':num(val('s-day')), loan:val('s-loan')===''?'':num(val('s-loan')),
+      insExp:val('s-ins'), licExp:val('s-lic'), emiExp:val('s-emi'), updatedAt:Date.now()};
+    const btn = sheet.querySelector('[data-save]'); btn.disabled = true; btn.textContent='Saving…';
+    try { await db.doc('settings/main').set(data); closeSheet(); }
+    catch(e){ btn.disabled=false; btn.textContent='Save settings'; showErr(e&&e.code==='invalid_argument'?'This account is not on the members list in Supabase, so it cannot save.':'Could not save. Check your connection and try again.'); }
+  });
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e=>{
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.tab){ S.tab = t.dataset.tab; render(); window.scrollTo(0,0); return; }
+  if (t.dataset.goto){ S.tab = t.dataset.goto; if (t.dataset.goto==='hires') S.hireFilter='pending'; render(); window.scrollTo(0,0); return; }
+  if (t.dataset.period){ S.period = t.dataset.period; render(); return; }
+  if (t.dataset.hf){ S.hireFilter = t.dataset.hf; render(); return; }
+  if (t.dataset.cf){ S.costFilter = t.dataset.cf; render(); return; }
+  if (t.hasAttribute('data-close')){ closeSheet(); return; }
+  if (t.id==='openSettings' || t.id==='driverRate'){ openSettings(); return; }
+  if (t.id==='signOut'){ t.disabled = true; sb.auth.signOut().finally(()=>location.reload()); return; }
+  if (t.hasAttribute('data-dprice')) return openDieselPrice();
+  if (t.dataset.dq){ S.diesel.litres = t.dataset.dq; render(); return; }
+  if (t.id==='d-save') return saveFill(t);
+  if (t.dataset.new==='hire') return openHire();
+  if (t.dataset.new==='cost') return openCost();
+  if (t.dataset.new==='toll') return openCost(null, 'toll');
+  if (t.dataset.new==='pass') return openPass();
+  if (t.dataset.editPass) return openPass(S.passes.find(x=>x.id===t.dataset.editPass));
+  if (t.dataset.payback){
+    if (!t.dataset.armed){ t.dataset.armed='1'; const orig = t.textContent; t.textContent='Confirm '+rs(t.dataset.amt); setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent=orig; } }, 3500); return; }
+    t.disabled = true; t.textContent = 'Saving…';
+    db.collection('expenses').doc(t.dataset.payback).update({reimbursed:true, reimbursedAt:today(), updatedAt:Date.now()})
+      .catch(()=>{ t.disabled=false; t.textContent='Could not save, tap to retry'; delete t.dataset.armed; });
+    return;
+  }
+  if (t.dataset.new==='payout') return openPayout();
+  if (t.dataset.editHire) return openHire(S.hires.find(h=>h.id===t.dataset.editHire));
+  if (t.dataset.editCost) return openCost(S.expenses.find(x=>x.id===t.dataset.editCost));
+  if (t.dataset.editPayout) return openPayout(S.payouts.find(x=>x.id===t.dataset.editPayout));
+  if (t.dataset.payWeek){
+    if (!t.dataset.armed){ t.dataset.armed='1'; const orig = t.textContent; t.textContent='Confirm '+rs(t.dataset.amt); setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent=orig; } }, 3500); return; }
+    t.disabled = true; t.textContent = 'Saving…';
+    db.collection('payouts').doc().set({date:today(), amount:num(t.dataset.amt), week:t.dataset.payWeek, note:'Weekly pay', createdAt:Date.now(), updatedAt:Date.now(), ...(meId?{by:meId, byName:myName}:{})})
+      .catch(()=>{ t.disabled=false; t.textContent='Could not save, tap to retry'; delete t.dataset.armed; });
+  }
+});
+
+/* ---------- data ---------- */
+render();
+/* ---------- Supabase connection ---------- */
+const CFG = window.GB_CONFIG || {};
+const sb = (window.supabase && CFG.supabaseUrl && CFG.supabaseKey && !/YOUR-PROJECT/.test(CFG.supabaseUrl))
+  ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseKey) : null;
+let myName = '';
+const uid = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2,10);
+const mapErr = e => (e && (e.code==='42501' || /row-level security|permission/i.test(e.message||''))) ? {code:'invalid_argument', message:e.message} : {code:'unavailable', message:(e&&e.message)||'Network error'};
+
+function makeDb(){
+  const cache = {}, loaded = new Set(), loading = {}, listeners = [];
+  const notify = c => listeners.filter(l=>l.c===c).forEach(l=>l.fire());
+  const put = (c,id,d) => { (cache[c] ||= new Map()).set(id,d); notify(c); };
+  const drop = (c,id) => { if (cache[c]){ cache[c].delete(id); notify(c); } };
+  function load(c){
+    if (loading[c]) return loading[c];
+    return loading[c] = (async () => {
+      const rows = []; let from = 0; const page = 1000;
+      for (;;){
+        const {data, error} = await sb.from('records').select('id,data').eq('coll', c).range(from, from+page-1);
+        if (error) throw mapErr(error);
+        rows.push(...data); if (data.length < page) break; from += page;
+      }
+      cache[c] = new Map(rows.map(r=>[r.id, r.data])); loaded.add(c); notify(c);
+    })().finally(()=>{ delete loading[c]; });
+  }
+  // live updates from the other phones
+  sb.channel('gb-records').on('postgres_changes', {event:'*', schema:'public', table:'records'}, p=>{
+    if (p.eventType==='DELETE'){ const o = p.old || {}; if (o.coll) drop(o.coll, o.id); }
+    else if (p.new && cache[p.new.coll]) put(p.new.coll, p.new.id, p.new.data);
+  }).subscribe();
+  // catch up after the phone was asleep
+  document.addEventListener('visibilitychange', ()=>{ if (document.visibilityState==='visible') [...loaded].forEach(c=>load(c).catch(()=>{})); });
+
+  function docRef(c, id){
+    const ref = {
+      id,
+      async set(d){
+        const {error} = await sb.from('records').upsert({coll:c, id, data:d, updated_at:new Date().toISOString()});
+        if (error) throw mapErr(error); put(c, id, d);
+      },
+      async update(d){
+        let cur = cache[c] && cache[c].get(id);
+        if (!cur){ const {data} = await sb.from('records').select('data').eq('coll',c).eq('id',id).maybeSingle(); cur = data && data.data; }
+        if (!cur) throw {code:'invalid_argument', message:'Not found'};
+        return ref.set(Object.assign({}, cur, d));
+      },
+      async delete(){
+        const {error} = await sb.from('records').delete().eq('coll',c).eq('id',id);
+        if (error) throw mapErr(error); drop(c, id);
+      },
+      onSnapshot(next, err){
+        const l = {c, fire:()=>{ const d = cache[c] && cache[c].get(id); next({id, exists:!!d, data:()=>d, metadata:{fromCache:!loaded.has(c), hasPendingWrites:false}}); }};
+        listeners.push(l);
+        if (loaded.has(c)) l.fire(); else load(c).catch(e=>err && err(e));
+        return ()=>{ const i = listeners.indexOf(l); if (i>=0) listeners.splice(i,1); };
+      }
+    };
+    return ref;
+  }
+  return {
+    doc(path){ const [c,id] = path.split('/'); return docRef(c,id); },
+    collection(c){
+      return {
+        doc: id => docRef(c, id || uid()),
+        onSnapshot(next, err){
+          const l = {c, fire:()=>{ const m = cache[c] || new Map(); const docs = [...m.entries()].map(([id,d])=>({id, exists:true, data:()=>d}));
+            next({docs, size:docs.length, empty:!docs.length, metadata:{fromCache:!loaded.has(c), hasPendingWrites:false}}); }};
+          listeners.push(l);
+          if (loaded.has(c)) l.fire(); else load(c).catch(e=>err && err(e));
+          return ()=>{ const i = listeners.indexOf(l); if (i>=0) listeners.splice(i,1); };
+        }
+      };
+    }
+  };
+}
+
+const photoStore = {
+  async upload(blob, opts){
+    const path = (meId||'shared') + '/' + uid() + '.jpg';
+    const {error} = await sb.storage.from('bills').upload(path, blob, {contentType:(opts&&opts.type)||'image/jpeg', upsert:false});
+    if (error) throw {code: /size|large/i.test(error.message||'') ? 'too_large' : 'upstream_error', message:error.message};
+    return {id:path};
+  },
+  async delete(id){ await sb.storage.from('bills').remove([id]); }
+};
+function fillPhotos(box){
+  if (!sb || !box) return;
+  box.querySelectorAll('img[data-pid]').forEach(async img=>{
+    const {data} = await sb.storage.from('bills').createSignedUrl(img.dataset.pid, 3600).catch(()=>({}));
+    if (data && data.signedUrl) img.src = data.signedUrl; else img.dispatchEvent(new Event('error'));
+  });
+}
+
+/* ---------- sign-in, owner setup, users ---------- */
+let USER_DOMAIN = 'users.gunasinghe-group.app';
+const toEmail = u => { u = String(u||'').trim().toLowerCase(); return u.includes('@') ? u : u + '@' + USER_DOMAIN; };
+async function usersApi(action, payload){
+  const {data} = await sb.auth.getSession();
+  const tok = data && data.session ? data.session.access_token : '';
+  let r;
+  try { r = await fetch('/api/users', {method:'POST', headers:{'Content-Type':'application/json', ...(tok?{Authorization:'Bearer '+tok}:{})}, body:JSON.stringify(Object.assign({action}, payload||{}))}); }
+  catch(e){ throw Object.assign(new Error('Could not reach the server. Check your connection.'), {status:0}); }
+  const j = await r.json().catch(()=>({}));
+  if (!r.ok) throw Object.assign(new Error(j.message || 'Something went wrong.'), {status:r.status});
+  return j;
+}
+function loginView(){
+  return `<div class="card login">
+    <h2>Sign in</h2>
+    <p class="hint" style="margin:0">Use the username and password the owner gave you.</p>
+    <form id="loginForm" class="form" novalidate>
+      <div class="fields">
+        <div class="field"><label for="l-user">Username</label><input id="l-user" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="nimal" required></div>
+        <div class="field"><label for="l-pass">Password</label><input id="l-pass" type="password" autocomplete="current-password" placeholder="Password" required></div>
+      </div>
+      <div class="err" id="l-err" hidden></div>
+      <button class="btn primary" type="submit" id="l-go">Sign in</button>
+    </form>
+  </div>`;
+}
+function setupView(){
+  return `<div class="card login">
+    <h2>Create the owner account</h2>
+    <p class="hint" style="margin:0">This is the first time Gunasinghe Group is opened. Make your own login now. After that you can add the other users in Settings.</p>
+    <form id="setupForm" class="form" novalidate>
+      <div class="fields">
+        <div class="field"><label for="o-name">Your name</label><input id="o-name" autocomplete="name" placeholder="Name"></div>
+        <div class="field"><label for="o-user">Username</label><input id="o-user" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="e.g. gunasinghe"></div>
+        <div class="field"><label for="o-pass">Password</label><input id="o-pass" type="password" autocomplete="new-password" placeholder="At least 6 characters"></div>
+        <div class="field"><label for="o-pass2">Repeat password</label><input id="o-pass2" type="password" autocomplete="new-password" placeholder="Same again"></div>
+      </div>
+      <div class="hint">Usernames use letters and numbers, 3 to 20 characters, no spaces.</div>
+      <div class="err" id="o-err" hidden></div>
+      <button class="btn primary" type="submit" id="o-go">Create owner account</button>
+    </form>
+  </div>`;
+}
+async function signIn(username, password){
+  const {data, error} = await sb.auth.signInWithPassword({email:toEmail(username), password});
+  if (error || !data.session) throw error || new Error('No session');
+  begin(data.session);
+}
+document.addEventListener('submit', async e=>{
+  if (e.target.id==='loginForm'){
+    e.preventDefault();
+    const user = $('#l-user').value.trim(), password = $('#l-pass').value, btn = $('#l-go'), err = $('#l-err');
+    err.hidden = true;
+    if (!user || !password){ err.textContent = 'Enter your username and password.'; err.hidden = false; return; }
+    btn.disabled = true; btn.textContent = 'Signing in…';
+    try { await signIn(user, password); }
+    catch(x){ btn.disabled = false; btn.textContent = 'Sign in'; err.textContent = /invalid/i.test(x&&x.message||'') ? 'That username or password is wrong. The owner can reset your password in Settings.' : 'Could not sign in. Check your connection and try again.'; err.hidden = false; }
+  }
+  if (e.target.id==='setupForm'){
+    e.preventDefault();
+    const name = $('#o-name').value.trim(), user = $('#o-user').value.trim().toLowerCase(), p1 = $('#o-pass').value, p2 = $('#o-pass2').value;
+    const btn = $('#o-go'), err = $('#o-err'); err.hidden = true;
+    const fail = m => { err.textContent = m; err.hidden = false; btn.disabled = false; btn.textContent = 'Create owner account'; };
+    if (!/^[a-z0-9._-]{3,20}$/.test(user)) return fail('Username must be 3 to 20 letters or numbers, with no spaces.');
+    if (p1.length < 6) return fail('Password must be at least 6 characters.');
+    if (p1 !== p2) return fail('The two passwords are different.');
+    btn.disabled = true; btn.textContent = 'Creating…';
+    try { await usersApi('setup', {name, username:user, password:p1}); await signIn(user, p1); }
+    catch(x){ fail(x.message || 'Could not create the account.'); }
+  }
+});
+
+function usersBoxHtml(st){
+  if (st.state==='loading') return `<div class="hint">Loading users…</div>`;
+  if (st.state==='error') return `<div class="hint">${esc(st.message)}</div>`;
+  if (st.state!=='ok') return '';
+  return `<div class="group-h" style="margin:0"><span>Users</span><span>${st.users.length}</span></div>
+    <div class="rows">${st.users.map(u=>`<div class="row" style="flex-wrap:wrap;row-gap:8px">
+      <div class="main"><div class="t">${esc(u.name||u.username)} ${u.role==='owner'?'<span class="pill ok">Owner</span>':''}${u.username===st.me?' <span class="pill due">You</span>':''}</div><div class="s">@${esc(u.username)}</div></div>
+      <div style="display:flex;gap:6px"><button class="btn small" data-upw="${esc(u.username)}">Password</button>${u.role==='owner'?'':`<button class="btn small danger" data-urm="${esc(u.username)}">Remove</button>`}</div>
+      ${st.pw===u.username?`<div style="flex-basis:100%;display:flex;gap:8px"><input id="u-newpw" type="password" autocomplete="new-password" placeholder="New password (6+ characters)" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg)"><button class="btn small primary" data-upw-save="${esc(u.username)}">Save</button></div>`:''}
+    </div>`).join('')}</div>
+    <div class="fields">
+      <div class="field"><label for="u-name">Name</label><input id="u-name" placeholder="e.g. Nimal"></div>
+      <div class="field"><label for="u-user">Username</label><input id="u-user" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="nimal"></div>
+      <div class="field"><label for="u-pass">Password</label><input id="u-pass" type="password" autocomplete="new-password" placeholder="At least 6 characters"></div>
+    </div>
+    <button class="btn" id="u-add">＋ Add user</button>
+    <div class="hint" id="u-msg"></div>`;
+}
+async function loadUsers(){
+  const box = $('#usersBox'); if (!box) return;
+  const st = {state:'loading'}; box.innerHTML = usersBoxHtml(st);
+  try { const j = await usersApi('list'); Object.assign(st, {state:'ok', users:j.users, me:j.me}); }
+  catch(x){ if (x.status===403) { st.state = 'hidden'; } else { st.state = 'error'; st.message = x.status===503 ? 'To add users from here, connect Supabase in the Vercel Storage tab.' : x.message; } }
+  const draw = (msg) => { box.innerHTML = usersBoxHtml(st); if (msg){ const m = $('#u-msg'); if (m) m.textContent = msg; } };
+  draw();
+  box.onclick = async ev=>{
+    const b = ev.target.closest('button'); if (!b) return;
+    if (b.dataset.upw){ st.pw = st.pw===b.dataset.upw ? null : b.dataset.upw; draw(); const i = $('#u-newpw'); if (i) i.focus(); return; }
+    if (b.dataset.upwSave){
+      const pw = $('#u-newpw').value; if (pw.length<6) return draw('Password must be at least 6 characters.');
+      b.disabled = true; b.textContent = 'Saving…';
+      try { await usersApi('password', {username:b.dataset.upwSave, password:pw}); st.pw = null; draw('Password changed for @'+b.dataset.upwSave+'.'); }
+      catch(x){ draw(x.message); }
+      return;
+    }
+    if (b.dataset.urm){
+      if (!b.dataset.armed){ b.dataset.armed = '1'; b.textContent = 'Tap again'; setTimeout(()=>{ if (b.isConnected){ delete b.dataset.armed; b.textContent = 'Remove'; } }, 3000); return; }
+      b.disabled = true; b.textContent = 'Removing…';
+      try { await usersApi('remove', {username:b.dataset.urm}); st.users = st.users.filter(u=>u.username!==b.dataset.urm); draw('@'+b.dataset.urm+' can no longer sign in. Their past entries are kept.'); }
+      catch(x){ draw(x.message); }
+      return;
+    }
+    if (b.id==='u-add'){
+      const name = $('#u-name').value.trim(), username = $('#u-user').value.trim().toLowerCase(), password = $('#u-pass').value;
+      if (!/^[a-z0-9._-]{3,20}$/.test(username)) return draw('Username must be 3 to 20 letters or numbers, with no spaces.');
+      if (password.length<6) return draw('Password must be at least 6 characters.');
+      b.disabled = true; b.textContent = 'Adding…';
+      try { await usersApi('add', {name, username, password}); st.users = [...st.users, {username, name:name||username, role:'member'}]; draw('Added @'+username+'. Give them the username and password to sign in.'); }
+      catch(x){ b.disabled = false; b.textContent = '＋ Add user'; const m = $('#u-msg'); if (m) m.textContent = x.message; }
+    }
+  };
+}
+
+function begin(session){
+  meId = session.user.id;
+  const md = session.user.user_metadata || {};
+  myName = md.name || md.full_name || (session.user.email||'').split('@')[0];
+  S.me = md.username ? '@'+md.username : (session.user.email||'');
+  db = makeDb(); assetsCap = photoStore; canWrite = true;
+  S.auth = 'in'; S.status = 'ok'; render();
+  const timer = setTimeout(()=>{ if (loading()){ S.status = 'slow'; render(); } }, 10000);
+  const done = () => { if (!loading()){ clearTimeout(timer); if (S.status==='slow') S.status='ok'; } };
+  const onErr = e => { clearTimeout(timer); S.status = e && e.code==='invalid_argument' ? 'denied' : 'slow'; if (S.status==='denied') canWrite = false; render(); };
+  ['hires','expenses','payouts','passes'].forEach(c=>{
+    db.collection(c).onSnapshot(snap=>{
+      S[c] = snap.docs.map(d=>Object.assign({id:d.id}, d.data())).filter(x=>x.date);
+      if (!snap.metadata.fromCache) S.loaded[c] = true;
+      done(); render();
+    }, onErr);
+  });
+  db.doc('settings/main').onSnapshot(s=>{ S.settingsDoc = s.exists ? s.data() : null; render(); }, ()=>{});
+}
+
+/* ---------- start ---------- */
+(async function start(){
+  if (!sb){ S.status = 'offline'; canWrite = false; render(); return; }
+  sb.auth.onAuthStateChange(ev=>{ if (ev==='SIGNED_OUT') location.reload(); });
+  const {data} = await sb.auth.getSession();
+  if (data && data.session){ begin(data.session); return; }
+  S.auth = 'loading'; render();
+  try {
+    const r = await fetch('/api/users?action=status', {cache:'no-store'});
+    const j = r.ok ? await r.json() : {};
+    if (j.domain) USER_DOMAIN = j.domain;
+    S.auth = j.needsSetup ? 'setup' : 'login';
+  } catch(e){ S.auth = 'login'; }
+  render();
+})();
+})();
+
+</script>
+
+</body>
+</html>
