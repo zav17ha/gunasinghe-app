@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Gunasinghe Group</title>
-<meta name="theme-color" content="#F3F4F2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0D100F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F4F2">
+<meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Gunasinghe Group">
@@ -23,17 +23,8 @@
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",system-ui,"Segoe UI",Roboto,sans-serif;
   --font-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",system-ui,sans-serif;
   --r:14px;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0D100F; --surface:#181C1A; --fg:#ECEFED; --muted:#98A09C; --line:#272D2A;
-  --accent:#3DBE92; --accent-soft:#153328; --neg:#FF6F62; --neg-soft:#3A1A17; --warn:#E3A33D; --warn-soft:#3A2B12;
-  --c-driver:#8C98F0; --c-fuel:#EDA543; --c-repair:#FF6F62; --c-loan:#AE8FE6; --c-ins:#5EC0E0; --c-toll:#93CC6A; --c-other:#9AA19E;
-  color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0D100F; --surface:#181C1A; --fg:#ECEFED; --muted:#98A09C; --line:#272D2A;
-  --accent:#3DBE92; --accent-soft:#153328; --neg:#FF6F62; --neg-soft:#3A1A17; --warn:#E3A33D; --warn-soft:#3A2B12;
-  --c-driver:#8C98F0; --c-fuel:#EDA543; --c-repair:#FF6F62; --c-loan:#AE8FE6; --c-ins:#5EC0E0; --c-toll:#93CC6A; --c-other:#9AA19E;
-  color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
@@ -71,14 +62,15 @@ main .wrap{display:flex;flex-direction:column;gap:16px;padding-block:6px 24px}
 .photo img{max-width:100%;max-height:420px;border-radius:12px;display:block;background:var(--surface)}
 .photo-add{width:100%;border-style:dashed}
 .row > button.main{padding:0;min-width:0}
+.start-row{display:flex;gap:8px}
+.start-row input{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--bg);font-size:17px;font-weight:600;outline:none}
+.fields .field select{-webkit-appearance:none;appearance:none;text-align-last:right;padding-right:18px;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236A716E' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right center;cursor:pointer}
 .login{display:flex;flex-direction:column;gap:14px;margin-top:24px}
 .login h2{margin:0;font-family:var(--font-display);font-size:24px;letter-spacing:-.02em}
 .login .field label{width:30%}
 .signed{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 4px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 14px;border-radius:12px;font-weight:600;font-size:15px;background:var(--surface);color:var(--fg);border:1px solid var(--line)}
 .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-:root[data-theme="dark"] .btn.primary{color:#04150F}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#04150F}}
 .btn.danger{color:var(--neg);background:var(--neg-soft);border-color:transparent}
 .btn.small{padding:7px 12px;font-size:14px;border-radius:10px}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
@@ -131,7 +123,7 @@ button.row:active{background:color-mix(in srgb,var(--fg) 5%,transparent)}
 
 /* tab bar */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-nav.tabs .wrap{display:grid;grid-template-columns:repeat(5,1fr)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(6,1fr)}
 /* diesel calculator */
 .calc{display:flex;flex-direction:column;gap:14px}
 .calc-l{font-size:13px;color:var(--muted);font-weight:600}
@@ -148,8 +140,8 @@ nav.tabs .wrap{display:grid;grid-template-columns:repeat(5,1fr)}
 .price-btn em{font-style:normal;font-weight:600;color:var(--c-fuel);font-size:14px}
 .quick{display:flex;gap:8px;flex-wrap:wrap}
 .quick button{flex:1;min-width:56px;padding:8px 0;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-weight:600;font-size:14px}
-nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding-block:8px 6px;font-size:11px;font-weight:600;color:var(--muted)}
-nav.tabs button svg{width:24px;height:24px}
+nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding-block:8px 6px;font-size:10.5px;font-weight:600;color:var(--muted);min-width:0}
+nav.tabs button svg{width:22px;height:22px}
 nav.tabs button[aria-current="page"]{color:var(--accent)}
 
 /* sheet */
@@ -197,6 +189,7 @@ nav.tabs button[aria-current="page"]{color:var(--accent)}
     <button data-tab="diesel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M6 8h6M14 10h2.5a1.5 1.5 0 0 1 1.5 1.5V17a1.5 1.5 0 0 0 3 0V8l-3-3"/></svg>Diesel</button>
     <button data-tab="costs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3"/></svg>Costs</button>
     <button data-tab="driver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Driver</button>
+    <button data-tab="routes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Routes</button>
   </div>
 </nav>
 
@@ -241,9 +234,9 @@ function tollSub(x){
   return [x.place, x.billNo?'No. '+x.billNo:'', h?'for '+(h.customer||'hire'):''].filter(Boolean).join(' · ') || (x.kind||'Highway bill');
 }
 let assetsCap = null;
-const DEF = {vehicle:'', driver:'', driverMode:'fixed', driverValue:'', diesel:397, kmRate:'', dayRate:'', loan:'', insExp:'', licExp:'', emiExp:''};
+const DEF = {vehicle:'', driver:'', startPoint:'', driverMode:'fixed', driverValue:'', diesel:397, kmRate:'', dayRate:'', loan:'', insExp:'', licExp:'', emiExp:''};
 
-const S = {hires:[], expenses:[], payouts:[], passes:[], settingsDoc:null, loaded:{hires:false,expenses:false,payouts:false,passes:false},
+const S = {hires:[], expenses:[], payouts:[], passes:[], routes:[], routesLoaded:false, settingsDoc:null, loaded:{hires:false,expenses:false,payouts:false,passes:false},
   tab:'overview', period:'month', hireFilter:'all', costFilter:'all', status:'connecting'};
 const settings = () => Object.assign({}, DEF, S.settingsDoc || {});
 let db = null, userCap = null, meId = null, canWrite = true;
@@ -396,7 +389,7 @@ function renderHires(){
   html += `<div class="chips"><button class="chip" data-hf="all" aria-pressed="${S.hireFilter==='all'}">All hires</button><button class="chip" data-hf="pending" aria-pressed="${S.hireFilter==='pending'}">Not paid yet${pc?' · '+pc:''}</button><button class="chip" data-hf="passes" aria-pressed="${gp}">Gate passes${S.passes.length?' · '+S.passes.length:''}</button></div>`;
   if (gp) return renderPasses(html);
   if (loading() && S.status!=='offline' && !S.hires.length) return html + emptyBox('Loading hires…','');
-  if (!list.length) return html + (S.hireFilter==='pending' ? emptyBox('Every customer has paid','Nothing outstanding.') : emptyBox('No hires yet','Tap New hire after each job. Enter the customer, route and price; the driver’s pay is filled in from your settings.'));
+  if (!list.length) return html + (S.hireFilter==='pending' ? emptyBox('Every customer has paid','Nothing outstanding.') : emptyBox('No hires yet','Tap New hire after each job. Pick the destination and the driver’s pay fills in from the Routes tab.'));
   html += grouped(list, h=>{
     const route = [h.from,h.to].filter(Boolean).join(' → ');
     const how = h.mode==='km' ? `${num(h.km)} km × ${num(h.kmRate)}` : h.mode==='day' ? `${num(h.days)} day${num(h.days)===1?'':'s'}` : 'Fixed';
@@ -431,7 +424,7 @@ function renderDriver(){
   const w = canWrite&&db ? '' : 'disabled';
   let html = banner() + `<div class="section-title"><h2>${esc(st.driver||'Driver')}</h2><span>Paid per hire, settled weekly</span></div>`;
   html += `<div class="card hero"><div class="label">Owed to driver now</div><div class="big num ${owed<0?'neg':''}">${rs(owed)}</div><div class="sub num"><span>Pay ${rs(wageOwed)}</span><span>Bills to pay back ${rs(billAmt)}</span></div></div>`;
-  html += `<div class="actions"><button class="btn primary" data-new="toll" ${w}>＋ Highway bill</button><button class="btn" data-new="payout" ${w}>Record advance</button><button class="btn" id="driverRate">${st.driverMode==='percent'?(num(st.driverValue)||0)+'% per hire':(st.driverValue!==''?rs(st.driverValue)+' per hire':'Set pay per hire')}</button></div>`;
+  html += `<div class="actions"><button class="btn primary" data-new="toll" ${w}>＋ Highway bill</button><button class="btn" data-new="payout" ${w}>Record advance</button><button class="btn" data-goto="routes">Driver pay by destination</button></div>`;
   if (bills.length){
     html += `<div class="group-h"><span>Bills to pay back</span><span class="num">${rs(billAmt)}</span></div><div class="rows">${bills.sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="row">${datebox(x.date)}<button class="main" data-edit-cost="${esc(x.id)}" style="text-align:left"><div class="t">${esc(x.kind||'Highway bill')}</div><div class="s">${esc(tollSub(x))}</div></button><button class="btn small primary" data-payback="${esc(x.id)}" data-amt="${num(x.amount)}" ${w}>Pay back ${rs(x.amount)}</button></div>`).join('')}</div>`;
   }
@@ -457,7 +450,7 @@ function render(){
   const plate = $('#plate'); plate.hidden = !st.vehicle; plate.textContent = st.vehicle;
   document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-current', b.dataset.tab===S.tab?'page':'false'));
   const a = document.activeElement, keep = a && a.id && a.closest && a.closest('#view') ? {id:a.id, s:a.selectionStart, e:a.selectionEnd} : null;
-  $('#view').innerHTML = S.tab==='hires' ? renderHires() : S.tab==='costs' ? renderCosts() : S.tab==='driver' ? renderDriver() : S.tab==='diesel' ? renderDiesel() : renderOverview();
+  $('#view').innerHTML = S.tab==='hires' ? renderHires() : S.tab==='costs' ? renderCosts() : S.tab==='driver' ? renderDriver() : S.tab==='diesel' ? renderDiesel() : S.tab==='routes' ? renderRoutes() : renderOverview();
   if (keep){ const el = document.getElementById(keep.id); if (el){ el.focus(); try{ el.setSelectionRange(keep.s, keep.e); }catch(e){} } }
 }
 
@@ -573,19 +566,83 @@ async function remove(coll, id){
   try { await db.collection(coll).doc(id).delete(); closeSheet(); } catch(e){ showErr('Could not delete. Check your connection and try again.'); }
 }
 
+/* ---------- routes: destinations with fixed driver pay ---------- */
+const routeByName = n => S.routes.find(r=>String(r.name||'').trim().toLowerCase()===String(n||'').trim().toLowerCase());
+const sortedRoutes = () => S.routes.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+function renderRoutes(){
+  const st = settings(), w = canWrite&&db ? '' : 'disabled';
+  let html = banner() + `<div class="section-title"><h2>Routes</h2><button class="btn small primary" data-new="route" ${w}>＋ Add destination</button></div>`;
+  html += `<div class="card calc" style="gap:10px">
+    <label class="calc-l" for="r-start">Starting point</label>
+    <div class="start-row"><input id="r-start" placeholder="e.g. Negombo" value="${esc(S.startDraft ?? st.startPoint)}" autocomplete="off"><button class="btn small primary" id="r-start-save" ${w}>Save</button></div>
+    <div class="err" id="r-err" hidden></div>
+    <div class="hint" style="margin:0;padding:0">${st.startPoint?'Every new hire starts from '+esc(st.startPoint)+'. You can still pick another place on a hire.':'Type where the lorry starts every trip, then tap Save.'}</div>
+  </div>`;
+  if (!S.routesLoaded && S.status!=='offline' && !S.routes.length) return html + emptyBox('Loading destinations…','');
+  if (!S.routes.length) return html + emptyBox('No destinations yet','Add each place you deliver to and the driver’s fixed pay for that trip. When you enter a hire, pick the destination and the driver’s pay fills in by itself.');
+  const counts = {}; S.hires.forEach(h=>{ if (h.routeId) counts[h.routeId] = (counts[h.routeId]||0)+1; });
+  html += `<div class="group-h"><span>Destinations · ${S.routes.length}</span><span>Driver pay</span></div><div class="rows">${sortedRoutes().map(r=>{
+    const sub = [num(r.price)?'Hire '+rs(r.price):'', num(r.km)?num(r.km)+' km':'', counts[r.id]?counts[r.id]+' hire'+(counts[r.id]===1?'':'s'):''].filter(Boolean).join(' · ') || 'No hires yet';
+    return `<button class="row" data-edit-route="${esc(r.id)}"><span class="dot" style="background:var(--c-driver)"></span><div class="main"><div class="t">${esc(r.name)}</div><div class="s num">${esc(sub)}</div></div><div class="amt num">${rs(r.driverPay)}</div></button>`;
+  }).join('')}</div>`;
+  return html;
+}
+function openRoute(r){
+  const editing = !!r; r = r || {};
+  openSheet(head(editing?'Edit destination':'New destination') + `<div class="form">
+    <div class="fields">
+      ${field('r-name','Destination',`placeholder="Kandy" value="${esc(r.name)}" autocomplete="off"`)}
+      ${field('r-pay','Driver pay',`inputmode="decimal" placeholder="0" value="${esc(r.driverPay)}"`,'Rs')}
+    </div>
+    <div class="hint">The driver gets this fixed amount for every hire to this place.</div>
+    <div class="fields">
+      ${field('r-price','Usual hire price',`inputmode="decimal" placeholder="Optional" value="${esc(r.price)}"`,'Rs')}
+      ${field('r-km','Distance',`inputmode="decimal" placeholder="Optional" value="${esc(r.km)}"`,'km')}
+    </div>
+    <div class="hint">Optional. Filled into the hire so you type it once.${editing?' Changes here don’t alter hires already saved.':''}</div>
+    ${footer(editing)}
+  </div>`);
+  const sheet = $('#sheet');
+  sheet.querySelector('[data-save]').addEventListener('click', ()=>{
+    const name = val('r-name').replace(/\s+/g,' '), pay = num(val('r-pay'));
+    if (!name) return showErr('Enter the destination name.');
+    const dup = routeByName(name); if (dup && dup.id!==r.id) return showErr(name+' is already in the list.');
+    if (pay<=0) return showErr('Enter the driver’s pay for this destination.');
+    save('routes', editing?r.id:null, {name, driverPay:pay, price:val('r-price')===''?'':num(val('r-price')), km:val('r-km')===''?'':num(val('r-km'))});
+  });
+  const del = sheet.querySelector('[data-del]'); if (del) del.addEventListener('click', ()=>armDelete(del, ()=>remove('routes', r.id)));
+}
+async function saveStart(btn){
+  const v = ($('#r-start').value||'').trim().replace(/\s+/g,' '), err = $('#r-err');
+  err.hidden = true; btn.disabled = true; btn.textContent = 'Saving…';
+  try { await db.doc('settings/main').set(Object.assign({}, settings(), {startPoint:v, updatedAt:Date.now()})); S.startDraft = undefined; render(); }
+  catch(e){ btn.disabled = false; btn.textContent = 'Save'; err.textContent = 'Could not save. Check your connection and try again.'; err.hidden = false; }
+}
+document.addEventListener('input', e=>{ if (e.target.id==='r-start') S.startDraft = e.target.value; });
+
 /* hire sheet */
 function openHire(h){
-  const st = settings(); const editing = !!h;
+  const st = settings(); const editing = !!h; const start = String(st.startPoint||'').trim();
   h = h || {date:today(), mode:'fixed', kmRate:st.kmRate, dayRate:st.dayRate, paid:false};
   let mode = h.mode || 'fixed', paid = !!h.paid, driverDirty = editing;
+  const routes = sortedRoutes();
+  let route = editing ? ((h.routeId && S.routes.find(r=>r.id===h.routeId)) || routeByName(h.to) || null) : null;
+  let toOther = !routes.length || (editing && !route && !!h.to);
+  let fromOther = !start || (editing && !!h.from && h.from.trim().toLowerCase()!==start.toLowerCase());
+  const fromSel = start ? `<div class="field"><label for="h-fromsel">From</label><select id="h-fromsel"><option value="start" ${fromOther?'':'selected'}>${esc(start)}</option><option value="other" ${fromOther?'selected':''}>Other place…</option></select></div>` : '';
+  const toSel = routes.length ? `<div class="field"><label for="h-tosel">To</label><select id="h-tosel"><option value="" ${!route&&!toOther?'selected':''}>Choose destination</option>${routes.map(r=>`<option value="${esc(r.id)}" ${route&&route.id===r.id?'selected':''}>${esc(r.name)}</option>`).join('')}<option value="__other" ${toOther?'selected':''}>Other place…</option></select></div>` : '';
+  const setupHint = !start && !routes.length ? 'Set your starting point and destinations in the Routes tab to pick them here.' : !start ? 'Set your starting point in the Routes tab so it fills in every time.' : !routes.length ? 'Add destinations in the Routes tab to pick them here with the driver’s pay.' : '';
   openSheet(head(editing?'Edit hire':'New hire') + `<div class="form">
     <div class="fields">
       ${field('h-date','Date',`type="date" value="${esc(h.date)}"`)}
       ${field('h-customer','Customer',`placeholder="Name or company" value="${esc(h.customer)}" autocomplete="off"`)}
-      ${field('h-from','From',`placeholder="Negombo" value="${esc(h.from)}"`)}
-      ${field('h-to','To',`placeholder="Kandy" value="${esc(h.to)}"`)}
+      ${fromSel}
+      <div id="h-fromwrap" ${fromOther?'':'hidden'}>${field('h-from', start?'From place':'From', `placeholder="${start?'Type the place':'Negombo'}" value="${esc(fromOther ? (h.from||'') : '')}"`)}</div>
+      ${toSel}
+      <div id="h-towrap" ${toOther?'':'hidden'}>${field('h-to', routes.length?'Destination':'To', `placeholder="Kandy" value="${esc(toOther ? (h.to||'') : '')}"`)}</div>
       ${field('h-goods','Load',`placeholder="Bricks, furniture…" value="${esc(h.goods)}"`)}
     </div>
+    ${setupHint?`<div class="hint">${setupHint}</div>`:''}
     <div class="seg" id="h-mode">${[['fixed','Fixed price'],['km','Per km'],['day','Per day']].map(([v,l])=>`<button data-m="${v}" aria-pressed="${v===mode}">${l}</button>`).join('')}</div>
     <div class="fields">
       <div data-show="fixed">${field('h-amount','Hire price',`inputmode="decimal" placeholder="0" value="${esc(h.amount)}"`,'Rs')}</div>
@@ -609,18 +666,37 @@ function openHire(h){
   const recalc = () => {
     const total = hireTotal(read());
     $('#h-total').textContent = rs(total);
-    if (!driverDirty){ const d = defaultDriverPay(total); $('#h-driver').value = d ? d : ''; }
-    const hint = st.driverMode==='percent' ? `Default: ${num(st.driverValue)}% of the total` : st.driverValue!=='' ? `Default: ${rs(st.driverValue)} per hire` : 'Set a default driver rate in Settings';
-    $('#h-driverhint').textContent = hint + (driverDirty?' · edited for this hire':'');
+    if (!driverDirty && route) $('#h-driver').value = num(route.driverPay) || '';
+    let hint;
+    if (route) hint = num(val('h-driver'))===num(route.driverPay) ? `Fixed pay for ${route.name}` : `Fixed pay for ${route.name} is ${rs(route.driverPay)} · changed for this hire`;
+    else if (toOther) hint = 'Type the driver’s pay for this trip.';
+    else hint = 'Choose a destination and the driver’s pay fills in.';
+    $('#h-driverhint').textContent = hint;
+  };
+  const applyRoute = (r, prev) => {
+    route = r || null; driverDirty = false;
+    if (route){
+      const amt = $('#h-amount'); if (num(route.price) && (!amt.value || (prev && num(amt.value)===num(prev.price)))) amt.value = num(route.price);
+      const km = $('#h-km'); if (num(route.km) && (!km.value || (prev && num(km.value)===num(prev.km)))) km.value = num(route.km);
+    } else if (prev) $('#h-driver').value = '';
+    recalc();
   };
   show(); recalc();
+  const fs = sheet.querySelector('#h-fromsel');
+  if (fs) fs.addEventListener('change', ()=>{ fromOther = fs.value==='other'; $('#h-fromwrap').hidden = !fromOther; if (fromOther) $('#h-from').focus(); });
+  const ts = sheet.querySelector('#h-tosel');
+  if (ts) ts.addEventListener('change', ()=>{ const prev = route; toOther = ts.value==='__other'; $('#h-towrap').hidden = !toOther; applyRoute(toOther || !ts.value ? null : S.routes.find(r=>r.id===ts.value), prev); if (toOther) $('#h-to').focus(); });
   sheet.querySelector('#h-mode').addEventListener('click', e=>{ const b = e.target.closest('[data-m]'); if(!b) return; mode = b.dataset.m; sheet.querySelectorAll('#h-mode button').forEach(x=>x.setAttribute('aria-pressed', x===b)); show(); recalc(); });
   sheet.querySelector('#h-paid').addEventListener('click', e=>{ const b = e.target.closest('[data-p]'); if(!b) return; paid = b.dataset.p==='1'; sheet.querySelectorAll('#h-paid button').forEach(x=>x.setAttribute('aria-pressed', x===b)); });
-  sheet.addEventListener('input', e=>{ if (e.target.id==='h-driver'){ driverDirty = true; recalc(); } else recalc(); });
+  sheet.addEventListener('input', e=>{ if (e.target.id==='h-driver'){ driverDirty = true; recalc(); } else if (e.target.tagName!=='SELECT') recalc(); });
   sheet.querySelector('[data-save]').addEventListener('click', ()=>{
-    const data = Object.assign(read(), {date:val('h-date'), customer:val('h-customer'), from:val('h-from'), to:val('h-to'), goods:val('h-goods'), driverPay:num(val('h-driver')), paid, notes:val('h-notes')});
+    const date = val('h-date');
+    if (!date) return showErr('Pick the date of the hire.');
+    const from = fromOther ? val('h-from') : start;
+    const to = route ? route.name : (toOther ? val('h-to') : '');
+    if (!to) return showErr(routes.length ? 'Choose the destination, or pick Other place and type it.' : 'Enter where the lorry is going.');
+    const data = Object.assign(read(), {date, customer:val('h-customer'), from, to, routeId: route ? route.id : null, goods:val('h-goods'), driverPay:num(val('h-driver')), paid, notes:val('h-notes')});
     data.total = hireTotal(data);
-    if (!data.date) return showErr('Pick the date of the hire.');
     if (data.total<=0) return showErr(mode==='km'?'Enter the distance and rate per km.':mode==='day'?'Enter the days and rate per day.':'Enter the hire price.');
     save('hires', editing?h.id:null, data);
   });
@@ -801,15 +877,13 @@ function openPayout(p){
 
 /* settings sheet */
 function openSettings(){
-  const st = settings(); let dm = st.driverMode;
+  const st = settings();
   openSheet(head('Settings') + `<div class="form">
     <div class="fields">
       ${field('s-vehicle','Lorry number',`placeholder="e.g. LM-4521" value="${esc(st.vehicle)}" autocapitalize="characters"`)}
       ${field('s-driver','Driver name',`placeholder="Name" value="${esc(st.driver)}"`)}
     </div>
-    <div class="seg" id="s-dm"><button data-dm="fixed" aria-pressed="${dm==='fixed'}">Fixed per hire</button><button data-dm="percent" aria-pressed="${dm==='percent'}">% of hire</button></div>
-    <div class="fields">${field('s-dv','Driver pay',`inputmode="decimal" placeholder="0" value="${esc(st.driverValue)}"`,`<span id="s-dvu">${dm==='percent'?'%':'Rs'}</span>`)}</div>
-    <div class="hint">Filled into every new hire. You can still change it on each hire.</div>
+    <div class="hint">Driver pay is set for each destination in the Routes tab.</div>
     <div class="fields">
       ${field('s-diesel','Diesel price per litre',`inputmode="decimal" value="${esc(st.diesel)}"`,'Rs')}
       ${field('s-km','Usual rate per km',`inputmode="decimal" placeholder="Optional" value="${esc(st.kmRate)}"`,'Rs')}
@@ -830,9 +904,8 @@ function openSettings(){
   </div>`);
   const sheet = $('#sheet');
   loadUsers();
-  sheet.querySelector('#s-dm').addEventListener('click', e=>{ const b = e.target.closest('[data-dm]'); if(!b) return; dm = b.dataset.dm; sheet.querySelectorAll('#s-dm button').forEach(x=>x.setAttribute('aria-pressed', x===b)); $('#s-dvu').textContent = dm==='percent'?'%':'Rs'; });
   sheet.querySelector('[data-save]').addEventListener('click', async ()=>{
-    const data = {vehicle:val('s-vehicle').toUpperCase(), driver:val('s-driver'), driverMode:dm, driverValue:val('s-dv')===''?'':num(val('s-dv')),
+    const data = {vehicle:val('s-vehicle').toUpperCase(), driver:val('s-driver'), driverMode:st.driverMode, driverValue:st.driverValue, startPoint:st.startPoint||'',
       diesel:num(val('s-diesel'))||397, kmRate:val('s-km')===''?'':num(val('s-km')), dayRate:val('s-day')===''?'':num(val('s-day')), loan:val('s-loan')===''?'':num(val('s-loan')),
       insExp:val('s-ins'), licExp:val('s-lic'), emiExp:val('s-emi'), updatedAt:Date.now()};
     const btn = sheet.querySelector('[data-save]'); btn.disabled = true; btn.textContent='Saving…';
@@ -859,6 +932,9 @@ document.addEventListener('click', e=>{
   if (t.dataset.new==='cost') return openCost();
   if (t.dataset.new==='toll') return openCost(null, 'toll');
   if (t.dataset.new==='pass') return openPass();
+  if (t.dataset.new==='route') return openRoute();
+  if (t.dataset.editRoute) return openRoute(S.routes.find(x=>x.id===t.dataset.editRoute));
+  if (t.id==='r-start-save') return saveStart(t);
   if (t.dataset.editPass) return openPass(S.passes.find(x=>x.id===t.dataset.editPass));
   if (t.dataset.payback){
     if (!t.dataset.armed){ t.dataset.armed='1'; const orig = t.textContent; t.textContent='Confirm '+rs(t.dataset.amt); setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent=orig; } }, 3500); return; }
@@ -1118,6 +1194,7 @@ function begin(session){
     }, onErr);
   });
   db.doc('settings/main').onSnapshot(s=>{ S.settingsDoc = s.exists ? s.data() : null; render(); }, ()=>{});
+  db.collection('routes').onSnapshot(snap=>{ S.routes = snap.docs.map(d=>Object.assign({id:d.id}, d.data())).filter(x=>x.name); if (!snap.metadata.fromCache) S.routesLoaded = true; render(); }, ()=>{ S.routesLoaded = true; render(); });
 }
 
 /* ---------- start ---------- */
