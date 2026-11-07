@@ -170,6 +170,21 @@ nav.tabs button[aria-current="page"]{color:var(--accent)}
 .row-btns{display:flex;gap:10px}
 .row-btns .btn{flex:1}
 /* ---- clean pass ---- */
+.period{padding:8px 8px 14px;display:flex;flex-direction:column;gap:12px}
+.pnav{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.pnav .arrow{width:44px;height:44px;flex:none;border-radius:12px;display:grid;place-items:center;color:var(--accent);background:var(--accent-soft)}
+.pnav .arrow svg{width:20px;height:20px}
+.pnav .arrow[disabled]{background:transparent;color:var(--line);cursor:default}
+.pnav .mid{flex:1;min-width:0;text-align:center;padding:2px 4px}
+.pnav .mid b{display:block;font-family:var(--font-display);font-size:17px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pnav .mid span{display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-top:1px}
+.pnav .mid u{color:var(--accent);text-decoration:none}
+.card.nav-only{padding:8px}
+.wk{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;padding:12px 8px 0;border-top:1px solid var(--line);margin:0 4px}
+.wk span{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.wk b{display:block;font-family:var(--font-display);font-size:19px;font-weight:700;letter-spacing:-.01em;margin-top:1px;white-space:nowrap}
+.wk b.neg{color:var(--neg)} .wk b.pos{color:var(--accent)}
+
 .card,.rows,.stat,.chart,.empty,.fields{box-shadow:var(--shadow)}
 .sheet .fields{box-shadow:none}
 .btn .ic{width:16px;height:16px;flex:none}
@@ -334,9 +349,10 @@ function seg(name, opts, cur){
 function emptyBox(title, text){ return `<div class="empty"><b>${title}</b>${text}</div>`; }
 
 function renderOverview(){
-  const r = range(S.period), s = summarize(r);
+  const browse = S.period==='week' || S.period==='month';
+  const r = browse ? periodRange(S.period, S.oOff) : range(S.period), s = summarize(r);
   const st = settings();
-  const periodName = {week:'this week', month:'this month', year:'this year', all:'all time'}[S.period];
+  const periodName = browse && S.oOff!==0 ? (S.period==='week' ? 'for '+weekLabel(r[0]) : 'in '+periodTitle('month', S.oOff)) : {week:'this week', month:'this month', year:'this year', all:'all time'}[S.period];
   const pending = S.hires.filter(h=>!h.paid);
   const pendingAmt = pending.reduce((a,h)=>a+num(h.total),0);
   const owed = driverWeeks().reduce((a,w)=>a+w.earned-w.paid,0) + billsOwed().reduce((a,x)=>a+num(x.amount),0);
@@ -351,6 +367,7 @@ function renderOverview(){
 
   let html = banner() + `<div class="section-title"><h2>Overview</h2><span>${fmtDate(today())}</span></div>`;
   html += seg('period', [['week','Week'],['month','Month'],['year','Year'],['all','All']], S.period);
+  if (browse) html += `<div class="card nav-only">${pnav(S.period, S.oOff, 'o')}</div>`;
   html += `<div class="card hero feature ${s.profit<0?'loss':''}">
     <div class="label">${s.profit<0?'Loss':'Net profit'} ${periodName}</div>
     <div class="big num">${loading()&&S.status!=='offline'?'—':rs(s.profit)}</div>
@@ -413,30 +430,69 @@ function grouped(items, rowFn, amtFn, fmt){
   }).join('');
 }
 
-function renderPasses(html){
-  if (loading() && S.status!=='offline' && !S.passes.length) return html + emptyBox('Loading gate passes…','');
-  if (!S.passes.length) return html + emptyBox('No gate passes yet','Tap New gate pass to keep the pass number, where it was issued and a photo. Link it to the hire it was for.');
-  return html + grouped(S.passes.slice(), g=>{
-    const h = g.hireId && S.hires.find(x=>x.id===g.hireId);
-    return `<button class="row" data-edit-pass="${esc(g.id)}">${datebox(g.date)}<span class="dot" style="background:var(--c-ins)"></span><div class="main"><div class="t">${esc(g.passNo ? 'Pass '+g.passNo : 'Gate pass')}</div><div class="s">${esc([g.place, h?'for '+(h.customer||'hire'):''].filter(Boolean).join(' · ') || 'No details')}</div></div><div class="amt">${g.photo?'<small>Photo</small>':''}</div></button>`;
-  }, ()=>1, n=>n+' pass'+(n===1?'':'es'));
+/* ---------- weeks (Mon–Sun) and months ---------- */
+function periodRange(view, off){
+  if (view==='week'){ const a = addDays(weekStart(today()), 7*off); return [a, addDays(a,6)]; }
+  const d = parse(today().slice(0,7)+'-01'); const m = new Date(d.getFullYear(), d.getMonth()+off, 1);
+  const k = iso(m).slice(0,7); return [k+'-01', k+'-31'];
 }
+function periodTitle(view, off){
+  const r = periodRange(view, off);
+  if (view==='week') return weekLabel(r[0]) + ' ' + parse(r[1]).getFullYear();
+  return monthLabel(r[0].slice(0,7)).replace(/^(\w{3})/, m=>({Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July',Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December'}[m]));
+}
+function periodNote(view, off){
+  if (off===0) return view==='week' ? 'This week' : 'This month';
+  if (off===-1) return view==='week' ? 'Last week' : 'Last month';
+  return view==='week' ? Math.abs(off)+' weeks ago' : Math.abs(off)+' months ago';
+}
+function pnav(view, off, key){
+  return `<div class="pnav"><button class="arrow" data-pstep="${key}" data-d="-1" aria-label="Previous ${view}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="mid" data-pnow="${key}" ${off===0?'tabindex="-1"':''}><b class="num">${periodTitle(view, off)}</b><span>${periodNote(view, off)}${off!==0?' · <u>back to today</u>':''}</span></button>
+    <button class="arrow" data-pstep="${key}" data-d="1" ${off>=0?'disabled':''} aria-label="Next ${view}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>`;
+}
+S.hView = 'week'; S.hOff = 0; S.oOff = 0;
+function hireRow(h){
+  const route = [h.from,h.to].filter(Boolean).join(' → ');
+  const how = h.mode==='km' ? `${num(h.km)} km × ${num(h.kmRate)}` : h.mode==='day' ? `${num(h.days)} day${num(h.days)===1?'':'s'}` : '';
+  const np = S.passes.filter(g=>g.hireId===h.id).length;
+  return `<button class="row" data-edit-hire="${esc(h.id)}">${datebox(h.date)}<div class="main"><div class="t">${esc(h.customer||'Customer')}</div><div class="s">${esc(route||h.goods||how||'Hire')}${route&&how?' · '+how:''}${np?' · '+np+' gate pass'+(np===1?'':'es'):''}</div></div><div class="amt num">${rs(h.total)}<small>${h.paid?'<span class="pill ok">Paid</span>':'<span class="pill due">Not paid</span>'}</small></div></button>`;
+}
+function passRow(g){
+  const h = g.hireId && S.hires.find(x=>x.id===g.hireId);
+  return `<button class="row" data-edit-pass="${esc(g.id)}">${datebox(g.date)}<span class="dot" style="background:var(--c-ins)"></span><div class="main"><div class="t">${esc(g.passNo ? 'Pass '+g.passNo : 'Gate pass')}</div><div class="s">${esc([g.place, h?'for '+(h.customer||'hire'):''].filter(Boolean).join(' · ') || 'No details')}</div></div><div class="amt">${g.photo?'<small>Photo</small>':''}</div></button>`;
+}
+const byDateDesc = (a,b) => b.date.localeCompare(a.date) || (b.createdAt||0)-(a.createdAt||0);
+function listInPeriod(items, rowFn, amtFn, fmt){
+  if (S.hView==='week') return `<div class="rows">${items.sort(byDateDesc).map(rowFn).join('')}</div>`;
+  const wk = {}; items.forEach(x=>{ (wk[weekStart(x.date)] ||= []).push(x); });
+  return Object.keys(wk).sort().reverse().map(w=>{
+    const l = wk[w].sort(byDateDesc);
+    return `<div class="group-h"><span>${weekLabel(w)}</span><span class="num">${fmt(l.reduce((s,x)=>s+amtFn(x),0))}</span></div><div class="rows">${l.map(rowFn).join('')}</div>`;
+  }).join('');
+}
+function hireDefaultDate(){ const r = periodRange(S.hView, S.hOff), t = today(); return inR(t, r) ? t : r[0]; }
 function renderHires(){
-  let list = S.hires.slice();
-  if (S.hireFilter==='pending') list = list.filter(h=>!h.paid);
+  const r = periodRange(S.hView, S.hOff), s = summarize(r), w = canWrite&&db ? '' : 'disabled';
   const gp = S.hireFilter==='passes';
-  let html = banner() + `<div class="section-title"><h2>${gp?'Gate passes':'Hires'}</h2>${gp?`<button class="btn small primary" data-new="pass" ${canWrite&&db?'':'disabled'}>${PLUS}New gate pass</button>`:`<button class="btn small primary" data-new="hire" ${canWrite&&db?'':'disabled'}>${PLUS}New hire</button>`}</div>`;
-  const pc = S.hires.filter(h=>!h.paid).length;
-  html += `<div class="chips"><button class="chip" data-hf="all" aria-pressed="${S.hireFilter==='all'}">All hires</button><button class="chip" data-hf="pending" aria-pressed="${S.hireFilter==='pending'}">Not paid yet${pc?' · '+pc:''}</button><button class="chip" data-hf="passes" aria-pressed="${gp}">Gate passes${S.passes.length?' · '+S.passes.length:''}</button></div>`;
-  if (gp) return renderPasses(html);
+  let html = banner() + `<div class="section-title"><h2>${gp?'Gate passes':'Hires'}</h2>${gp?`<button class="btn small primary" data-new="pass" ${w}>${PLUS}New gate pass</button>`:`<button class="btn small primary" data-new="hire" ${w}>${PLUS}New hire</button>`}</div>`;
+  html += seg('hview', [['week','Week'],['month','Month']], S.hView);
+  html += `<div class="card period">${pnav(S.hView, S.hOff, 'h')}
+    <div class="wk num"><div><span>Hires</span><b>${s.hires.length}</b></div><div><span>Income</span><b>${rs(s.income)}</b></div><div><span>Driver pay</span><b>${rs(s.driver)}</b></div><div><span>Profit after costs</span><b class="${s.profit<0?'neg':'pos'}">${rs(s.profit)}</b></div></div>
+  </div>`;
+  const inP = S.hires.filter(h=>inR(h.date, r));
+  const pc = inP.filter(h=>!h.paid).length, passes = S.passes.filter(g=>inR(g.date, r));
+  html += `<div class="chips"><button class="chip" data-hf="all" aria-pressed="${S.hireFilter==='all'}">All hires</button><button class="chip" data-hf="pending" aria-pressed="${S.hireFilter==='pending'}">Not paid yet${pc?' · '+pc:''}</button><button class="chip" data-hf="passes" aria-pressed="${gp}">Gate passes${passes.length?' · '+passes.length:''}</button></div>`;
+  const span = S.hView==='week' ? 'this week' : 'this month';
+  if (gp){
+    if (loading() && S.status!=='offline' && !S.passes.length) return html + emptyBox('Loading gate passes…','');
+    if (!passes.length) return html + emptyBox('No gate passes '+span, 'Tap New gate pass to keep the pass number, where it was issued and a photo.');
+    return html + listInPeriod(passes, passRow, ()=>1, n=>n+' pass'+(n===1?'':'es'));
+  }
+  let list = S.hireFilter==='pending' ? inP.filter(h=>!h.paid) : inP;
   if (loading() && S.status!=='offline' && !S.hires.length) return html + emptyBox('Loading hires…','');
-  if (!list.length) return html + (S.hireFilter==='pending' ? emptyBox('Every customer has paid','Nothing outstanding.') : emptyBox('No hires yet','Tap New hire after each job. Pick the destination and the driver’s pay fills in from the Routes tab.'));
-  html += grouped(list, h=>{
-    const route = [h.from,h.to].filter(Boolean).join(' → ');
-    const how = h.mode==='km' ? `${num(h.km)} km × ${num(h.kmRate)}` : h.mode==='day' ? `${num(h.days)} day${num(h.days)===1?'':'s'}` : '';
-    return `<button class="row" data-edit-hire="${esc(h.id)}">${datebox(h.date)}<div class="main"><div class="t">${esc(h.customer||'Customer')}</div><div class="s">${esc(route||h.goods||how||'Hire')}${route&&how?' · '+how:''}${(()=>{ const n = S.passes.filter(g=>g.hireId===h.id).length; return n?' · '+n+' gate pass'+(n===1?'':'es'):''; })()}</div></div><div class="amt num">${rs(h.total)}<small>${h.paid?'<span class="pill ok">Paid</span>':'<span class="pill due">Not paid</span>'}</small></div></button>`;
-  }, h=>num(h.total));
-  return html;
+  if (!list.length) return html + (S.hireFilter==='pending' ? emptyBox('Every customer has paid', 'Nothing outstanding '+span+'.') : emptyBox('No hires '+span, S.hView==='week'&&S.hOff===0 ? 'A new week starts every Monday. Tap New hire after each job and it goes into this week.' : 'Use the arrows to look at another '+S.hView+'.'));
+  return html + listInPeriod(list, hireRow, h=>num(h.total), rs);
 }
 
 function renderCosts(){
@@ -662,9 +718,9 @@ async function saveStart(btn){
 document.addEventListener('input', e=>{ if (e.target.id==='r-start') S.startDraft = e.target.value; });
 
 /* hire sheet */
-function openHire(h){
+function openHire(h, presetDate){
   const st = settings(); const editing = !!h; const start = String(st.startPoint||'').trim();
-  h = h || {date:today(), mode:'fixed', kmRate:st.kmRate, dayRate:st.dayRate, paid:false};
+  h = h || {date:presetDate||today(), mode:'fixed', kmRate:st.kmRate, dayRate:st.dayRate, paid:false};
   let mode = h.mode || 'fixed', paid = !!h.paid, driverDirty = editing;
   const routes = sortedRoutes();
   let route = editing ? ((h.routeId && S.routes.find(r=>r.id===h.routeId)) || routeByName(h.to) || null) : null;
@@ -960,7 +1016,10 @@ document.addEventListener('click', e=>{
   const t = e.target.closest('button'); if (!t) return;
   if (t.dataset.tab){ S.tab = t.dataset.tab; render(); window.scrollTo(0,0); return; }
   if (t.dataset.goto){ S.tab = t.dataset.goto; if (t.dataset.goto==='hires') S.hireFilter='pending'; render(); window.scrollTo(0,0); return; }
-  if (t.dataset.period){ S.period = t.dataset.period; render(); return; }
+  if (t.dataset.period){ S.period = t.dataset.period; S.oOff = 0; render(); return; }
+  if (t.dataset.hview){ S.hView = t.dataset.hview; S.hOff = 0; render(); return; }
+  if (t.dataset.pstep){ const k = t.dataset.pstep==='h' ? 'hOff' : 'oOff'; S[k] = Math.min(0, S[k] + Number(t.dataset.d)); render(); return; }
+  if (t.dataset.pnow){ const k = t.dataset.pnow==='h' ? 'hOff' : 'oOff'; if (S[k]!==0){ S[k] = 0; render(); } return; }
   if (t.dataset.hf){ S.hireFilter = t.dataset.hf; render(); return; }
   if (t.dataset.cf){ S.costFilter = t.dataset.cf; render(); return; }
   if (t.hasAttribute('data-close')){ closeSheet(); return; }
@@ -969,7 +1028,7 @@ document.addEventListener('click', e=>{
   if (t.hasAttribute('data-dprice')) return openDieselPrice();
   if (t.dataset.dq){ S.diesel.litres = t.dataset.dq; render(); return; }
   if (t.id==='d-save') return saveFill(t);
-  if (t.dataset.new==='hire') return openHire();
+  if (t.dataset.new==='hire') return openHire(null, S.tab==='hires' ? hireDefaultDate() : null);
   if (t.dataset.new==='cost') return openCost();
   if (t.dataset.new==='toll') return openCost(null, 'toll');
   if (t.dataset.new==='pass') return openPass();
